@@ -3,4 +3,13 @@
     <string name="title_home">Heim</string>
     <string name="title_profile">Heimasvæði</string>
     <string name="title_menu">Valmynd</string>
+    <string name="login">Innskráning</string>
+    <string name="signup">Nýskráning</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Netfang</string>
+    <string name="prompt_password">Lykilorð</string>
+    <string name="action_login">Innskráning</string>
+    <string name="action_sign_in_short">Nýskráning</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="login_failed">"Ekki tóks að innskrá notanda"</string>
 </resources>
