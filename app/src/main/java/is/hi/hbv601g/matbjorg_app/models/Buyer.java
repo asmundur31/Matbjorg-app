@@ -28,6 +28,15 @@ public class Buyer {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "Buyer{" +
+                "name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
     public long getId() {
         return id;
     }
@@ -58,10 +67,5 @@ public class Buyer {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
     }
 }
