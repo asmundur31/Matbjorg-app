@@ -24,7 +24,6 @@ public class MenuFragment extends Fragment {
     private static final int REQUEST_CODE_LOGIN = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         View root = inflater.inflate(R.layout.fragment_menu, container, false);
         mLoginButton = (Button) root.findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
