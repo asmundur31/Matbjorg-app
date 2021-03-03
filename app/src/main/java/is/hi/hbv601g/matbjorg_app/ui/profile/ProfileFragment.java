@@ -21,18 +21,17 @@ import is.hi.hbv601g.matbjorg_app.network.NetworkController;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
-    private ProfileViewModel profileViewModel;
     private TextView mText;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         mText = root.findViewById(R.id.text_profile);
-        SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        String loggedin_user_id = preferences.getString("loggedin_user_id", "");
+        SharedPreferences sharedPref = getActivity().getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
+        String loggedin_user_id = sharedPref.getString("loggedin_user_id", "");
+        String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
         Log.i(TAG, "Tjékkum hvort eitthver sé loggaður inn");
-        // TODO: virkar ekki
         if(!loggedin_user_id.equals("")) {
-            mText.setText("Notandi sem er loggaður inn er "+ loggedin_user_id);
+            mText.setText("Notandi sem er loggaður inn hefur id = "+ loggedin_user_id +"\n og er " + loggedin_user_type);
         } else {
             mText.setText("Enginn loggaður inn");
         }

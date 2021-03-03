@@ -41,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Username: " + mEmail.getText().toString() + "\n Password: " + mPassword.getText().toString(), Toast.LENGTH_SHORT).show();
                 networkController.login(new NetworkCallback<User>() {
                     @Override
                     public void onError(String error) {
@@ -50,11 +49,11 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(User user) {
-                        SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences sharedPref = getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("loggedin_user_id", ""+user.getId());
+                        editor.putString("loggedin_user_type", ""+user.getType());
                         editor.apply();
-                        // TODO: Fæ ekki til að virka
                         Toast.makeText(LoginActivity.this, "Innskráning gekk", Toast.LENGTH_SHORT).show();
                     }
                 }, mEmail.getText().toString(), mPassword.getText().toString());
