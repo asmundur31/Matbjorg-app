@@ -2,12 +2,12 @@ package is.hi.hbv601g.matbjorg_app.models;
 
 public class OrderItem {
     private long id;
-    private Advertisement advertisement;
+    private long advertisementId;
     private double amount;
 
-    public OrderItem(long id, Advertisement advertisement, double amount) {
+    public OrderItem(long id, long advertisementId, double amount) {
         this.id = id;
-        this.advertisement = advertisement;
+        this.advertisementId = advertisementId;
         this.amount = amount;
     }
 
@@ -19,12 +19,12 @@ public class OrderItem {
         this.id = id;
     }
 
-    public Advertisement getAdvertisement() {
-        return advertisement;
+    public long getAdvertisementId() {
+        return advertisementId;
     }
 
-    public void setAdvertisement(Advertisement advertisement) {
-        this.advertisement = advertisement;
+    public void setAdvertisementId(long advertisementId) {
+        this.advertisementId = advertisementId;
     }
 
     public double getAmount() {

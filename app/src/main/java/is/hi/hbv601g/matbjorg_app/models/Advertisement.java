@@ -15,11 +15,10 @@ public class Advertisement {
     private double price;
     private LocalDateTime expireDate;
     private LocalDateTime createdAt;
-    private List<OrderItem> items = new ArrayList<OrderItem>();
     private Set<Tag> tags;
     private String pictureName;
 
-    public Advertisement(long id, String name, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, List<OrderItem> items, Set<Tag> tags, String pictureName) {
+    public Advertisement(long id, String name, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, Set<Tag> tags, String pictureName) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -29,7 +28,6 @@ public class Advertisement {
         this.price = price;
         this.expireDate = expireDate;
         this.createdAt = createdAt;
-        this.items = items;
         this.tags = tags;
         this.pictureName = pictureName;
     }
@@ -104,14 +102,6 @@ public class Advertisement {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public List<OrderItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
     }
 
     public Set<Tag> getTags() {
