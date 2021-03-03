@@ -5,6 +5,7 @@
     <string name="title_menu">Valmynd</string>
     <string name="login">Innskráning</string>
     <string name="signup">Nýskráning</string>
+    <string name="logout">Útskráning</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Netfang</string>
     <string name="prompt_password">Lykilorð</string>
