@@ -129,4 +129,22 @@ public class Advertisement {
     public void setPictureName(String pictureName) {
         this.pictureName = pictureName;
     }
+
+    @Override
+    public String toString() {
+        return "Advertisement{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", active=" + active +
+                ", originalAmount=" + originalAmount +
+                ", currentAmount=" + currentAmount +
+                ", price=" + price +
+                ", expireDate=" + expireDate +
+                ", createdAt=" + createdAt +
+                ", items=" + items +
+                ", tags=" + tags +
+                ", pictureName='" + pictureName + '\'' +
+                '}';
+    }
 }

@@ -1,7 +1,10 @@
 package is.hi.hbv601g.matbjorg_app.network;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -9,7 +12,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +25,16 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import is.hi.hbv601g.matbjorg_app.models.Advertisement;
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
 import is.hi.hbv601g.matbjorg_app.models.User;
@@ -28,11 +42,42 @@ import is.hi.hbv601g.matbjorg_app.models.User;
 public class NetworkController {
     private static final String TAG = "NetworkController";
     public static final String MATBJORG_URL_REST = "https://matbjorg.herokuapp.com/rest/";
+    public static final String LOCAL_REST = "http://10.0.2.2:8080/rest/";
 
     private Context context;
 
     public NetworkController(Context context) {
         this.context = context;
+    }
+
+    public void getAdvertisements(NetworkCallback<List<Advertisement>> networkCallback) {
+        String url = LOCAL_REST + "advertisements";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Type collectionType = new TypeToken<List<Advertisement>>(){}.getType();
+                List<Advertisement> ads = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(ads);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja gögn");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
     public void getBuyers(NetworkCallback<List<Buyer>> networkCallback) {

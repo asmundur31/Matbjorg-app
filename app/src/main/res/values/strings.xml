@@ -13,4 +13,5 @@
     <string name="action_sign_in_short">Nýskráning</string>
     <string name="welcome">"Welcome !"</string>
     <string name="login_failed">"Ekki tóks að innskrá notanda"</string>
+    <string name="get_ads">Skoða auglýsingar</string>
 </resources>

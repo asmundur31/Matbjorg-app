@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.R;
+import is.hi.hbv601g.matbjorg_app.models.Advertisement;
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
 import is.hi.hbv601g.matbjorg_app.network.NetworkCallback;
@@ -29,6 +30,7 @@ public class HomeFragment extends Fragment {
     private Button mGetBuyers;
     private Button mGetSellers;
     private ListView mListView;
+    private Button mGetAds;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
@@ -38,6 +40,8 @@ public class HomeFragment extends Fragment {
         mGetBuyers = root.findViewById(R.id.button_get_buyers);
         mGetSellers = root.findViewById(R.id.button_get_sellers);
         mListView = root.findViewById(R.id.listview_buyers);
+        mGetAds = root.findViewById(R.id.get_ads);
+
         mGetBuyers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +76,26 @@ public class HomeFragment extends Fragment {
                         mListView.setAdapter(arrayAdapter);
                     }
                 });
+            }
+        });
+
+        mGetAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Sæki ads", Toast.LENGTH_SHORT).show();
+                networkController.getAdvertisements(new NetworkCallback<List<Advertisement>>() {
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(List<Advertisement> ads) {
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, ads);
+                        mListView.setAdapter(arrayAdapter);
+                    }
+                });
+
             }
         });
         return root;
