@@ -14,11 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
+import is.hi.hbv601g.matbjorg_app.models.Order;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
 import is.hi.hbv601g.matbjorg_app.network.NetworkCallback;
 import is.hi.hbv601g.matbjorg_app.network.NetworkController;
@@ -28,6 +28,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private Button mGetBuyers;
     private Button mGetSellers;
+    private Button mGetOrders;
     private ListView mListView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
         mGetBuyers = root.findViewById(R.id.button_get_buyers);
         mGetSellers = root.findViewById(R.id.button_get_sellers);
         mListView = root.findViewById(R.id.listview_buyers);
+        mGetOrders = root.findViewById(R.id.button_get_orders);
         mGetBuyers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +71,26 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onResponse(List<Seller> sellers) {
                         ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, sellers);
+                        mListView.setAdapter(arrayAdapter);
+                    }
+                });
+            }
+        });
+
+
+        mGetOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Sæki orders", Toast.LENGTH_SHORT).show();
+                networkController.getOrders(new NetworkCallback<List<Order>>() {
+                    @Override
+                    public void onError(String error) {
+                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onResponse(List<Order> orders) {
+                        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, orders);
                         mListView.setAdapter(arrayAdapter);
                     }
                 });

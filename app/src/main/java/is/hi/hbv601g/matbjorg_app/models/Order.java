@@ -22,38 +22,47 @@ public class Order {
     }
 
     public long getId() {
+
         return id;
     }
 
     public void setId(long id) {
+
         this.id = id;
     }
 
     public List<OrderItem> getItems() {
+
         return items;
     }
 
     public void setItems(List<OrderItem> items) {
+
         this.items = items;
     }
 
     public Buyer getBuyer() {
+
         return buyer;
     }
 
     public void setBuyer(Buyer buyer) {
+
         this.buyer = buyer;
     }
 
     public boolean isActive() {
+
         return active;
     }
 
     public void setActive(boolean active) {
+
         this.active = active;
     }
 
     public LocalDateTime getTimeOfPurchase() {
+
         return timeOfPurchase;
     }
 
@@ -62,10 +71,24 @@ public class Order {
     }
 
     public double getTotalPrice() {
+
         return totalPrice;
     }
 
     public void setTotalPrice(double totalPrice) {
+
         this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", items=" + items +
+                ", buyer=" + buyer +
+                ", active=" + active +
+                ", timeOfPurchase=" + timeOfPurchase +
+                ", totalPrice=" + totalPrice +
+                '}';
     }
 }
