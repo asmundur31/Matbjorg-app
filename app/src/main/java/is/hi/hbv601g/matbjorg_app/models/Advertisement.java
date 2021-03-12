@@ -1,6 +1,7 @@
 package is.hi.hbv601g.matbjorg_app.models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -8,19 +9,21 @@ import java.util.Set;
 public class Advertisement {
     private long id;
     private String name;
+    private String sellerName;
     private String description;
     private boolean active = true;
     private double originalAmount;
     private double currentAmount;
     private double price;
-    private LocalDateTime expireDate;
-    private LocalDateTime createdAt;
+    private String expireDate;
+    private String createdAt;
     private Set<Tag> tags;
     private String pictureName;
 
-    public Advertisement(long id, String name, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, Set<Tag> tags, String pictureName) {
+    public Advertisement(long id, String name, String sellerName, String description, boolean active, double originalAmount, double currentAmount, double price, String expireDate, String createdAt, Set<Tag> tags, String pictureName) {
         this.id = id;
         this.name = name;
+        this.sellerName = sellerName;
         this.description = description;
         this.active = active;
         this.originalAmount = originalAmount;
@@ -46,6 +49,14 @@ public class Advertisement {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
     }
 
     public String getDescription() {
@@ -88,19 +99,19 @@ public class Advertisement {
         this.price = price;
     }
 
-    public LocalDateTime getExpireDate() {
+    public String getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(LocalDateTime expireDate) {
+    public void setExpireDate(String expireDate) {
         this.expireDate = expireDate;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 

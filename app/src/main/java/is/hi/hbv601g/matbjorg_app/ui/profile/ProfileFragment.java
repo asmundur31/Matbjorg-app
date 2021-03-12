@@ -26,11 +26,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         mText = root.findViewById(R.id.text_profile);
-        SharedPreferences sharedPref = getActivity().getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
-        String loggedin_user_id = sharedPref.getString("loggedin_user_id", "");
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
+        long loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
         String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
         Log.i(TAG, "Tjékkum hvort eitthver sé loggaður inn");
-        if(!loggedin_user_id.equals("")) {
+        if(loggedin_user_id != -1) {
             mText.setText("Notandi sem er loggaður inn hefur id = "+ loggedin_user_id +"\n og er " + loggedin_user_type);
         } else {
             mText.setText("Enginn loggaður inn");

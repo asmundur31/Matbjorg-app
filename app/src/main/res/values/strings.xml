@@ -11,6 +11,7 @@
     <string name="prompt_password">Lykilorð</string>
     <string name="action_login">Innskráning</string>
     <string name="action_sign_in_short">Nýskráning</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="login_failed">"Ekki tóks að innskrá notanda"</string>
+    <string name="login_failed">Ekki tóks að innskrá notanda</string>
+    <string name="basket_title">Karfa</string>
+    <string name="sharedPref">"is.hi.hbv601g.matbjorg_app"</string>
 </resources>
