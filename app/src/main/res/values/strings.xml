@@ -12,6 +12,7 @@
     <string name="action_login">Innskráning</string>
     <string name="action_sign_in_short">Nýskráning</string>
     <string name="welcome">"Welcome !"</string>
-    <string name="login_failed">"Ekki tóks að innskrá notanda"</string>
+    <string name="login_failed">"Ekki tókst að innskrá notanda"</string>
     <string name="get_ads">Skoða auglýsingar</string>
+    <string name="advertisments_title">Auglýsingar</string>
 </resources>
