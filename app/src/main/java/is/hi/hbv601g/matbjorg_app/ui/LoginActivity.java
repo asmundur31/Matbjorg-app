@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("loggedin_user_id", ""+user.getId());
                         editor.putString("loggedin_user_type", ""+user.getType());
+                        editor.putLong("loggedin_user_id_long", user.getId());
                         editor.apply();
                         Toast.makeText(LoginActivity.this, "Innskráning gekk", Toast.LENGTH_SHORT).show();
                     }
