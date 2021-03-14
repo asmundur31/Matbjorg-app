@@ -153,6 +153,26 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    public void signup(NetworkCallback<User> networkCallback, String name, String email, String password) {
+        String url = LOCAL_REST + String.format("signup?name=%s&email=%s&password=%s", name, email, password);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                User user = gson.fromJson(response.toString(), new TypeToken<User>(){}.getType());
+                networkCallback.onResponse(user);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki skráð notanda");
+              }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+            
     public void getActiveOrder(NetworkCallback<Order> networkCallback, String token) {
         String url = URL_REST + "orders/active?token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -181,6 +201,7 @@ public class NetworkController {
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
+
     
   public void getOrders(NetworkCallback<List<Order>> networkCallback) {
         String url = URL_REST + "orders";
