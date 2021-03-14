@@ -10,22 +10,26 @@ Til þess að keyra upp appið í emulator með remote bakenda þá þarf að ge
 Til þess að keyra upp appið í emulator með local bakenda þá þarf að gera eftirfarandi:
 1. Clone-a þetta repo á tölvuna þína.
 2. Clona-a repo sem inniheldur bakenda á tölvuna þína ([Bakenda Repo](https://github.com/asmundur31/Matbjorg)).
-3. Keyra upp bakenda með IntelliJ
-4. Keyra appið í Android Studio með emulator.
+3. Setja upp posgres gagnagrunn og passa að application.properties skráinn hafi réttar upplýsingar í bakenda.
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/<nafn á gagnagrunni>
+spring.datasource.username=<notandanafn>
+spring.datasource.password=<lykilorð>
+```
+4. Keyra upp bakenda með IntelliJ
+5. Keyra appið í Android Studio með emulator.
 
 Athugið að á remote bakenda eru dummy gögn og dæmi um notendur eru:
 
-Kaupandi: Ásmundur Óskar Ásmundsson
+Kaupandi: 
+- Ásmundur Óskar Ásmundsson
+- Notandanafn: asmundur31@gmail.com
+- Lykilorð: 123
 
-Notandanafn: asmundur31@gmail.com
-
-Lykilorð: 123
-
-Kaupandi: Krónan
-
-Notandanafn: kronan@kronan.is
-
-Lykilorð: 123
+Söluaðili: 
+- Krónan
+- Notandanafn: kronan@kronan.is
+- Lykilorð: 123
 
 ## Virkni sem er kominn
 Karfa
