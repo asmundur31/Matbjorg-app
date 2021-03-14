@@ -43,6 +43,11 @@ Auglýsingar
 2. Skoða betur eina auglýsingu (vöru)
 3. Það virkar ekki að bæta aulýsingu við í körfuna
 
+Setja inn auglýsingu
+1. Setja inn nýja auglýsingu frá heimasvæði seljanda
+2. Vantar að setja inn mynd (kemur alltaf default mynd)
+3. Athugið að vöruflokkar sem hakað er í fylgja ekki með
+
 Innskráning
 1. Hægt að skrá sig inn
 
@@ -54,3 +59,4 @@ Nýskráning
 
 Heimasvæði
 1. Kaupandi getur séð pantanir sem hann hefur gert (active og inactive orders)
+
