@@ -2,6 +2,7 @@
 Þetta er framendi ofaná Matbjörg bakenda sem er að finna hér [Bakenda Repo](https://github.com/asmundur31/Matbjorg).
 
 ## Uppsetning
+Í skránni NetworkController er hægt að skipta á milli local og remote bakenda.
 
 Til þess að keyra upp appið í emulator með remote bakenda þá þarf að gera eftirfarandi:
 1. Clone-a þetta repo á tölvuna þína.
