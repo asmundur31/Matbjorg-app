@@ -31,7 +31,7 @@ Söluaðili:
 - Notandanafn: kronan@kronan.is
 - Lykilorð: 123
 
-## Virkni sem er kominn
+## Virkni sem er kominn fyrir code review
 Karfa
 1. Birta körfu
 2. Breyta magni af items
@@ -39,7 +39,7 @@ Karfa
 4. Kaupa körfu
 
 Auglýsingar
-1. Birta allar auglýsingar (vöru)
+1. Birta allar auglýsingar (vörur)
 2. Skoða betur eina auglýsingu (vöru)
 
 Innskráning
@@ -53,4 +53,4 @@ Nýskráning
 2. Hægt að stofna nýjan aðgang sem söluaðili
 
 Heimasvæði
-1. Kaupandi getur séð pantanir sem hann hefur gert (orders)
+1. Kaupandi getur séð pantanir sem hann hefur gert (active og inactive orders)
