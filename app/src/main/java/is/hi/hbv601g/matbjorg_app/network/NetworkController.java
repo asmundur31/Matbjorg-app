@@ -2,7 +2,10 @@ package is.hi.hbv601g.matbjorg_app.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -10,11 +13,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
@@ -114,7 +127,37 @@ public class NetworkController {
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
-
+    
+  public void getOrders(NetworkCallback<List<Order>> networkCallback) {
+        String url = LOCAL_REST + "orders";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.e(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Type collectionType = new TypeToken<List<Order>>(){}.getType();
+                List<Order> orders = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(orders);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja gögn");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+  
     public void confirmOrder(NetworkCallback<Order> networkCallback, String token) {
         String url = LOCAL_REST + "orders/confirm?token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
@@ -170,6 +213,36 @@ public class NetworkController {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, error.toString());
                 networkCallback.onError("Gekk ekki að eyða orderItem");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+  
+    public void getBuyerOrders(NetworkCallback<List<Order>> networkCallback, Long buyerId) {
+        String url = LOCAL_REST + "orders/" + String.format("buyer?buyerId=%s", buyerId.toString());;
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.e(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Type collectionType = new TypeToken<List<Order>>(){}.getType();
+                List<Order> orders = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(orders);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja gögn");
             }
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
