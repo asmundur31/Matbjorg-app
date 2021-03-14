@@ -39,4 +39,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_previous_orders" />
+
+    <Button
+        android:id="@+id/button_setja_inn_auglysingu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bæta við nýrri auglýsingu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/text_profile"
+        app:layout_constraintTop_toBottomOf="@+id/text_profile"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

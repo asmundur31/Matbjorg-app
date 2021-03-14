@@ -27,13 +27,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import is.hi.hbv601g.matbjorg_app.models.Advertisement;
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
 import is.hi.hbv601g.matbjorg_app.models.Order;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
+import is.hi.hbv601g.matbjorg_app.models.Tag;
 import is.hi.hbv601g.matbjorg_app.models.User;
 
 public class NetworkController {
@@ -167,6 +171,39 @@ public class NetworkController {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, error.toString());
                 networkCallback.onError("Gekk ekki að sækja gögn");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+
+    }
+
+    public void addAdvertisement(NetworkCallback<Advertisement> networkCallback, Long sellerId, String name,
+                                 String description, double originalAmount, double price, LocalDateTime expireDate) {
+
+        String url = LOCAL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s", sellerId.toString(), name, description, ""+originalAmount, ""+price, expireDate.toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Type collectionType = new TypeToken<Advertisement>(){}.getType();
+                Advertisement ad = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(ad);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að setja inn auglýsingu");
             }
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);

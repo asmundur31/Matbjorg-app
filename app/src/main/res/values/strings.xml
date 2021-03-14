@@ -13,4 +13,18 @@
     <string name="action_sign_in_short">Nýskráning</string>
     <string name="welcome">"Welcome !"</string>
     <string name="login_failed">"Ekki tóks að innskrá notanda"</string>
+    <string name="tag1">GRÆNMETI</string>
+    <string name="tag2">MJÓLKURVARA</string>
+    <string name="tag3">ÞURRVARA</string>
+    <string name="tag4">BRAUÐ</string>
+    <string name="tag5">BAKKELSI</string>
+    <string name="tag6">ÁVEXTIR</string>
+    <string name="tag7">DRYKKJARVARA</string>
+    <string name="tag8">VEITINGASTAÐUR</string>
+    <string name="tag9">SÆLGÆTI</string>
+    <string name="tag10">HEILSUVARA</string>
+    <string name="tag11">KJÖT</string>
+    <string name="tag12">BAUNIR</string>
+    <string name="tag13">VEGAN</string>
+    <string name="tag14">GRÆNMETISFÆÐI</string>
 </resources>

@@ -51,9 +51,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(User user) {
                         SharedPreferences sharedPref = getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("loggedin_user_id", ""+user.getId());
+                        editor.putLong("loggedin_user_id", + user.getId());
                         editor.putString("loggedin_user_type", ""+user.getType());
-                        editor.putLong("loggedin_user_id_long", user.getId());
                         editor.apply();
                         Toast.makeText(LoginActivity.this, "Innskráning gekk", Toast.LENGTH_SHORT).show();
                     }
