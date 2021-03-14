@@ -9,6 +9,7 @@
     android:background="@drawable/border">
 
     <LinearLayout
+        android:id="@+id/advertisement_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
