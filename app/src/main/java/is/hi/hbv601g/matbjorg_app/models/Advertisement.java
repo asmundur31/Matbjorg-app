@@ -18,12 +18,12 @@ public class Advertisement implements Parcelable {
     private double originalAmount;
     private double currentAmount;
     private double price;
-    private String expireDate;
-    private String createdAt;
+    private LocalDateTime expireDate;
+    private LocalDateTime createdAt;
     private Set<Tag> tags;
     private String pictureName;
 
-    public Advertisement(long id, String name, String sellerName, String description, boolean active, double originalAmount, double currentAmount, double price, String expireDate, String createdAt, Set<Tag> tags, String pictureName) {
+    public Advertisement(long id, String name, String sellerName, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, Set<Tag> tags, String pictureName) {
         this.id = id;
         this.name = name;
         this.sellerName = sellerName;
@@ -125,19 +125,19 @@ public class Advertisement implements Parcelable {
         this.price = price;
     }
 
-    public String getExpireDate() {
+    public LocalDateTime getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(String expireDate) {
+    public void setExpireDate(LocalDateTime expireDate) {
         this.expireDate = expireDate;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -156,7 +156,7 @@ public class Advertisement implements Parcelable {
     public void setPictureName(String pictureName) {
         this.pictureName = pictureName;
     }
-
+/*
     @Override
     public String toString() {
         return "Advertisement{" +
@@ -173,7 +173,7 @@ public class Advertisement implements Parcelable {
                 ", tags=" + tags +
                 ", pictureName='" + pictureName + '\'' +
                 '}';
-    }
+    }*/
 
     @Override
     public int describeContents() {

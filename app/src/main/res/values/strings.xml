@@ -16,7 +16,6 @@
     <string name="get_ads">Skoða auglýsingar</string>
     <string name="advertisments_title">Auglýsingar</string>
     <string name="button_add_to_cart">Bæta við körfu</string>
-    <string name="login_failed">Ekki tóks að innskrá notanda</string>
     <string name="basket_title">Karfa</string>
     <string name="sharedPref">"is.hi.hbv601g.matbjorg_app"</string>
     <string name="confirm_basket">Kaupa</string>

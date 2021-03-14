@@ -27,7 +27,7 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
     private ArrayList<String> mDescription = new ArrayList<>();
     private ArrayList<Double> mAmount = new ArrayList<>();
     private ArrayList<Double> mPrice = new ArrayList<>();
-    private ArrayList<String> mExpireDate = new ArrayList<>();
+    private ArrayList<LocalDateTime> mExpireDate = new ArrayList<>();
     private Context context;
     private OnItemListener listener;
 

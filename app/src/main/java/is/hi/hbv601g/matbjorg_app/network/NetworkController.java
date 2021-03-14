@@ -46,8 +46,9 @@ import is.hi.hbv601g.matbjorg_app.models.User;
 
 public class NetworkController {
     private static final String TAG = "NetworkController";
-    public static final String MATBJORG_URL_REST = "https://matbjorg.herokuapp.com/rest/";
-    public static final String LOCAL_REST = "http://10.0.2.2:8080/rest/";
+    public static final String URL_REST = "http://10.0.2.2:8080/rest/";
+    // Remote linkur "https://matbjorg.herokuapp.com/rest/"
+    // Local linkur "http://10.0.2.2:8080/rest/"
 
     private Context context;
 
@@ -56,7 +57,7 @@ public class NetworkController {
     }
 
     public void getAdvertisements(NetworkCallback<List<Advertisement>> networkCallback) {
-        String url = LOCAL_REST + "advertisements";
+        String url = URL_REST + "advertisements";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -86,7 +87,7 @@ public class NetworkController {
     }
 
     public void getBuyers(NetworkCallback<List<Buyer>> networkCallback) {
-        String url = LOCAL_REST + "buyers";
+        String url = URL_REST + "buyers";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -107,7 +108,7 @@ public class NetworkController {
     }
 
     public void getSellers(NetworkCallback<List<Seller>> networkCallback) {
-        String url = LOCAL_REST + "sellers";
+        String url = URL_REST + "sellers";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -127,7 +128,7 @@ public class NetworkController {
     }
 
     public void login(NetworkCallback<User> networkCallback, String email, String password) {
-        String url = LOCAL_REST + String.format("login?email=%s&password=%s", email, password);
+        String url = URL_REST + String.format("login?email=%s&password=%s", email, password);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -147,13 +148,22 @@ public class NetworkController {
     }
 
     public void getActiveOrder(NetworkCallback<Order> networkCallback, String token) {
-        String url = LOCAL_REST + "orders/active?token=" + token;
+        String url = URL_REST + "orders/active?token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
-                Gson gson = new Gson();
-                Order order = gson.fromJson(response.toString(), Order.class);
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Order order = gson.fromJson(json, Order.class);
                 networkCallback.onResponse(order);
             }
         }, new Response.ErrorListener() {
@@ -167,7 +177,7 @@ public class NetworkController {
     }
     
   public void getOrders(NetworkCallback<List<Order>> networkCallback) {
-        String url = LOCAL_REST + "orders";
+        String url = URL_REST + "orders";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -197,13 +207,22 @@ public class NetworkController {
     }
   
     public void confirmOrder(NetworkCallback<Order> networkCallback, String token) {
-        String url = LOCAL_REST + "orders/confirm?token=" + token;
+        String url = URL_REST + "orders/confirm?token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
-                Gson gson = new Gson();
-                Order order = gson.fromJson(response.toString(), Order.class);
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Order order = gson.fromJson(json, Order.class);
                 networkCallback.onResponse(order);
             }
         }, new Response.ErrorListener() {
@@ -217,13 +236,22 @@ public class NetworkController {
     }
 
     public void changeOrderItem(NetworkCallback<Order> networkCallback, long id, double newAmount, String token) {
-        String url = LOCAL_REST + "orders/changeItem/" + id + "?amount=" + newAmount + "&token=" + token;
+        String url = URL_REST + "orders/changeItem/" + id + "?amount=" + newAmount + "&token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
-                Gson gson = new Gson();
-                Order order = gson.fromJson(response.toString(), Order.class);
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Order order = gson.fromJson(json, Order.class);
                 networkCallback.onResponse(order);
             }
         }, new Response.ErrorListener() {
@@ -237,13 +265,22 @@ public class NetworkController {
     }
 
     public void deleteOrderItem(NetworkCallback<Order> networkCallback, long id, String token) {
-        String url = LOCAL_REST + "orders/changeItem/" + id + "?amount=" + 0 + "&token=" + token;
+        String url = URL_REST + "orders/changeItem/" + id + "?amount=" + 0 + "&token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
-                Gson gson = new Gson();
-                Order order = gson.fromJson(response.toString(), Order.class);
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Order order = gson.fromJson(json, Order.class);
                 networkCallback.onResponse(order);
             }
         }, new Response.ErrorListener() {
@@ -257,7 +294,7 @@ public class NetworkController {
     }
   
     public void getBuyerOrders(NetworkCallback<List<Order>> networkCallback, Long buyerId) {
-        String url = LOCAL_REST + "orders/" + String.format("buyer?buyerId=%s", buyerId.toString());;
+        String url = URL_REST + "orders/" + String.format("buyer?buyerId=%s", buyerId.toString());;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override

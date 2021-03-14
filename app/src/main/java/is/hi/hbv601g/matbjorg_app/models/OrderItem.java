@@ -38,13 +38,4 @@ public class OrderItem {
 
         this.amount = amount;
     }
-
-    @Override
-    public String toString() {
-        return "OrderItem{" +
-                "id=" + id +
-                ", advertisementId=" + advertisementId +
-                ", amount=" + amount +
-                '}';
-    }
 }
