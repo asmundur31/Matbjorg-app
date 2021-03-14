@@ -57,6 +57,7 @@ Innskráning
 
 Nýskráning
 1. Hægt að stofna nýjan aðgang sem kaupandi
+2. Hægt að stofna nýjan aðgang sem söluaðili
 
 Heimasvæði
 1. Kaupandi getur séð pantanir sem hann hefur gert (active og inactive orders)

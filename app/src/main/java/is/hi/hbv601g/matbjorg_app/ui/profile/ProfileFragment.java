@@ -90,6 +90,7 @@ public class ProfileFragment extends Fragment {
 
         } else {
             mText.setText("Enginn loggaður inn");
+            mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
         }
         return root;
     }
