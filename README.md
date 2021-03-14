@@ -41,6 +41,7 @@ Karfa
 Auglýsingar
 1. Birta allar auglýsingar (vörur)
 2. Skoða betur eina auglýsingu (vöru)
+3. Það virkar ekki að bæta aulýsingu við í körfuna
 
 Innskráning
 1. Hægt að skrá sig inn
@@ -50,7 +51,6 @@ Innskráning
 
 Nýskráning
 1. Hægt að stofna nýjan aðgang sem kaupandi
-2. Hægt að stofna nýjan aðgang sem söluaðili
 
 Heimasvæði
 1. Kaupandi getur séð pantanir sem hann hefur gert (active og inactive orders)
