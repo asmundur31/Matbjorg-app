@@ -154,7 +154,7 @@ public class NetworkController {
     }
 
     public void signup(NetworkCallback<User> networkCallback, String name, String email, String password) {
-        String url = LOCAL_REST + String.format("signup?name=%s&email=%s&password=%s", name, email, password);
+        String url = URL_REST + String.format("signup?name=%s&email=%s&password=%s", name, email, password);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
