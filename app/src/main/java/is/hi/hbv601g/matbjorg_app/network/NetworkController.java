@@ -1,6 +1,7 @@
 package is.hi.hbv601g.matbjorg_app.network;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
@@ -20,7 +21,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -29,10 +29,10 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
 import is.hi.hbv601g.matbjorg_app.models.Order;
+import is.hi.hbv601g.matbjorg_app.models.OrderItem;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
 import is.hi.hbv601g.matbjorg_app.models.User;
 
@@ -95,7 +95,7 @@ public class NetworkController {
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
                 Gson gson = new Gson();
-                User user = gson.fromJson(response.toString(), new TypeToken<User>(){}.getType());
+                User user = gson.fromJson(response.toString(), User.class);
                 networkCallback.onResponse(user);
             }
         }, new Response.ErrorListener() {
@@ -108,8 +108,27 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
-
-    public void getOrders(NetworkCallback<List<Order>> networkCallback) {
+    public void getActiveOrder(NetworkCallback<Order> networkCallback, String token) {
+        String url = LOCAL_REST + "orders/active?token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Order order = gson.fromJson(response.toString(), Order.class);
+                networkCallback.onResponse(order);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja gögn");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+    
+  public void getOrders(NetworkCallback<List<Order>> networkCallback) {
         String url = LOCAL_REST + "orders";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -137,11 +156,68 @@ public class NetworkController {
             }
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
-
-
-
+    }
+  
+    public void confirmOrder(NetworkCallback<Order> networkCallback, String token) {
+        String url = LOCAL_REST + "orders/confirm?token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Order order = gson.fromJson(response.toString(), Order.class);
+                networkCallback.onResponse(order);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að staðfesta pöntun");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    public void changeOrderItem(NetworkCallback<Order> networkCallback, long id, double newAmount, String token) {
+        String url = LOCAL_REST + "orders/changeItem/" + id + "?amount=" + newAmount + "&token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Order order = gson.fromJson(response.toString(), Order.class);
+                networkCallback.onResponse(order);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að breyta orderItem");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void deleteOrderItem(NetworkCallback<Order> networkCallback, long id, String token) {
+        String url = LOCAL_REST + "orders/changeItem/" + id + "?amount=" + 0 + "&token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Order order = gson.fromJson(response.toString(), Order.class);
+                networkCallback.onResponse(order);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að eyða orderItem");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+  
     public void getBuyerOrders(NetworkCallback<List<Order>> networkCallback, Long buyerId) {
         String url = LOCAL_REST + "orders/" + String.format("buyer?buyerId=%s", buyerId.toString());;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -170,6 +246,5 @@ public class NetworkController {
             }
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
-
     }
 }

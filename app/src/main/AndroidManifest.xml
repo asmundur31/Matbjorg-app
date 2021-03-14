@@ -11,7 +11,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Matbjorgapp">
+        android:theme="@style/Theme.Matbjorgapp"
+        android:usesCleartextTraffic="true">
+      
+        <activity android:name=".ui.BasketActivity"></activity>
         <activity android:name=".ui.SignupActivity"></activity>
         <activity android:name=".ui.LoginActivity" />
         <activity
