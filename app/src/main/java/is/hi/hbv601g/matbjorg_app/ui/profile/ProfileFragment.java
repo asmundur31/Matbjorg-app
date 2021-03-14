@@ -46,11 +46,6 @@ public class ProfileFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
         NetworkController networkController = new NetworkController(getContext());
         mText = root.findViewById(R.id.text_profile);
-
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
-        long loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
-        String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
-      
         mListView = root.findViewById(R.id.listView_profile_orders);
         mTextPantanir = root.findViewById(R.id.text_previous_orders);
         mButtonSetjaInnAuglysingu = root.findViewById(R.id.button_setja_inn_auglysingu);

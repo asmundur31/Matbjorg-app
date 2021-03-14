@@ -146,7 +146,7 @@ public class NetworkController {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, error.toString());
+                Log.d(TAG, error.toString());
                 networkCallback.onError("Gekk ekki að skrá notanda inn");
             }
         });
@@ -188,7 +188,7 @@ public class NetworkController {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONArray response) {
-                Log.e(TAG, response.toString());
+                Log.d(TAG, response.toString());
                 Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
                     @Override
                     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
@@ -305,7 +305,7 @@ public class NetworkController {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONArray response) {
-                Log.e(TAG, response.toString());
+                Log.d(TAG, response.toString());
                 Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
                     @Override
                     public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
@@ -332,7 +332,7 @@ public class NetworkController {
     public void addAdvertisement(NetworkCallback<Advertisement> networkCallback, Long sellerId, String name,
                                  String description, double originalAmount, double price, LocalDateTime expireDate) {
 
-        String url = LOCAL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s", sellerId.toString(), name, description, ""+originalAmount, ""+price, expireDate.toString());
+        String url = URL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s", sellerId.toString(), name, description, ""+originalAmount, ""+price, expireDate.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
