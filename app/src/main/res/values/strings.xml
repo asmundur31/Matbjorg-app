@@ -14,4 +14,8 @@
     <string name="login_failed">Ekki tóks að innskrá notanda</string>
     <string name="basket_title">Karfa</string>
     <string name="sharedPref">"is.hi.hbv601g.matbjorg_app"</string>
+    <string name="confirm_basket">Kaupa</string>
+    <string name="delete">Eyða</string>
+    <string name="change_amount">✓</string>
+    <string name="amount">Magn:</string>
 </resources>

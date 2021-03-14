@@ -19,6 +19,7 @@ import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
 import is.hi.hbv601g.matbjorg_app.models.Order;
+import is.hi.hbv601g.matbjorg_app.models.OrderItem;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
 import is.hi.hbv601g.matbjorg_app.models.User;
 
@@ -94,8 +95,8 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
-    public void getOrder(NetworkCallback<Order> networkCallback, String token) {
-        String url = LOCAL_REST + "orders?token=" + token;
+    public void getActiveOrder(NetworkCallback<Order> networkCallback, String token) {
+        String url = LOCAL_REST + "orders/active?token=" + token;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -109,6 +110,66 @@ public class NetworkController {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, error.toString());
                 networkCallback.onError("Gekk ekki að sækja gögn");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void confirmOrder(NetworkCallback<Order> networkCallback, String token) {
+        String url = LOCAL_REST + "orders/confirm?token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Order order = gson.fromJson(response.toString(), Order.class);
+                networkCallback.onResponse(order);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að staðfesta pöntun");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void changeOrderItem(NetworkCallback<Order> networkCallback, long id, double newAmount, String token) {
+        String url = LOCAL_REST + "orders/changeItem/" + id + "?amount=" + newAmount + "&token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Order order = gson.fromJson(response.toString(), Order.class);
+                networkCallback.onResponse(order);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að breyta orderItem");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void deleteOrderItem(NetworkCallback<Order> networkCallback, long id, String token) {
+        String url = LOCAL_REST + "orders/changeItem/" + id + "?amount=" + 0 + "&token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Order order = gson.fromJson(response.toString(), Order.class);
+                networkCallback.onResponse(order);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að eyða orderItem");
             }
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
