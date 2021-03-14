@@ -1,6 +1,8 @@
 package is.hi.hbv601g.matbjorg_app.ui.menu;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +24,11 @@ public class MenuFragment extends Fragment {
     private MenuViewModel menuViewModel;
     private Button mLoginButton;
     private Button mSignupButton;
+    private Button mLogoutButton;
     private static final int REQUEST_CODE_LOGIN = 0;
     private static final int REQUEST_CODE_SIGNUP = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        menuViewModel = new ViewModelProvider(this).get(MenuViewModel.class);
         View root = inflater.inflate(R.layout.fragment_menu, container, false);
         mLoginButton = (Button) root.findViewById(R.id.login_button);
         mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +46,18 @@ public class MenuFragment extends Fragment {
                 startActivityForResult(intent, REQUEST_CODE_SIGNUP);
             }
         });
-
+        mLogoutButton = (Button) root.findViewById(R.id.logout_button);
+        mLogoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPref = getActivity().getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.remove("loggedin_user_id");
+                editor.remove("loggedin_user_type");
+                editor.apply();
+                Toast.makeText(getActivity(), "Útskráning tókst", Toast.LENGTH_SHORT).show();
+            }
+        });
         return root;
     }
 }

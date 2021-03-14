@@ -1,12 +1,23 @@
 package is.hi.hbv601g.matbjorg_app.models;
 
 public class User {
+    private long id;
     private String email;
     private String password;
+    private String type;
 
-    public User(String email, String password) {
+    public User(String email, String password, String type) {
         this.email = email;
         this.password = password;
+        this.type = type;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -23,5 +34,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
