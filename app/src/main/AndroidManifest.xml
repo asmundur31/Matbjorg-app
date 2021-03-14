@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Matbjorgapp"
-        android:usesCleartextTraffic="true"
-        >
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ui.AddAdvertisementActivity"></activity>
+        <activity android:name=".ui.AdvertisementActivity"></activity>
+        <activity android:name=".ui.AdvertisementsActivity" />
+        <activity android:name=".ui.BasketActivity"></activity>
         <activity android:name=".ui.SignupActivity"></activity>
         <activity android:name=".ui.LoginActivity" />
         <activity
