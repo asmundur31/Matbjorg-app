@@ -1,11 +1,12 @@
 # Matbjörg app
 Þetta er framendi ofaná Matbjörg bakenda sem er að finna hér [Bakenda Repo](https://github.com/asmundur31/Matbjorg).
 
+## Uppsetning
+
 Til þess að keyra upp appið í emulator með remote bakenda þá þarf að gera eftirfarandi:
 1. Clone-a þetta repo á tölvuna þína.
 2. Keyra appið í Android Studio með emulator.
 
-## Uppsetning
 Til þess að keyra upp appið í emulator með local bakenda þá þarf að gera eftirfarandi:
 1. Clone-a þetta repo á tölvuna þína.
 2. Clona-a repo sem inniheldur bakenda á tölvuna þína ([Bakenda Repo](https://github.com/asmundur31/Matbjorg)).
