@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import is.hi.hbv601g.matbjorg_app.R;
@@ -24,7 +26,8 @@ public class SignupActivity extends AppCompatActivity {
     private EditText mName;
     private EditText mEmail;
     private EditText mPassword;
-
+    private RadioGroup mRadioGroup;
+    private RadioButton mRadioButton;
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, SignupActivity.class);
@@ -43,6 +46,9 @@ public class SignupActivity extends AppCompatActivity {
         mSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+                int selectedId = mRadioGroup.getCheckedRadioButtonId();
+                mRadioButton = (RadioButton) findViewById(selectedId);
                 networkController.signup(new NetworkCallback<User>() {
                     @Override
                     public void onError(String error) {
@@ -53,13 +59,13 @@ public class SignupActivity extends AppCompatActivity {
                     public void onResponse(User user) {
                         SharedPreferences sharedPref = getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("loggedin_user_id", ""+user.getId());
-                        editor.putString("loggedin_user_type", ""+user.getType());
-                        editor.putLong("loggedin_user_id_long", user.getId());
+                        editor.putLong("loggedin_user_id", user.getId());
+                        editor.putString("loggedin_user_type", user.getType());
+                        editor.putString("token", user.getToken());
                         editor.apply();
                         Toast.makeText(SignupActivity.this, "Nýskráning gekk", Toast.LENGTH_SHORT).show();
                     }
-                }, mName.getText().toString(), mEmail.getText().toString(), mPassword.getText().toString());
+                }, mRadioButton.getText().toString(), mName.getText().toString(), mEmail.getText().toString(), mPassword.getText().toString());
             }
         });
     }
