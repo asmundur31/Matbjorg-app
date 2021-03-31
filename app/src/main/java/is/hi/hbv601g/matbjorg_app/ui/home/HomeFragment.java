@@ -30,8 +30,6 @@ import is.hi.hbv601g.matbjorg_app.ui.AdvertisementsActivity;
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private HomeViewModel homeViewModel;
-    private Button mGetBuyers;
-    private Button mGetSellers;
     private Button mGetOrders;
     private ListView mListView;
     private Button mGetAds;
@@ -42,47 +40,9 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         NetworkController networkController = new NetworkController(getContext());
-        mGetBuyers = root.findViewById(R.id.button_get_buyers);
-        mGetSellers = root.findViewById(R.id.button_get_sellers);
         mListView = root.findViewById(R.id.listview_buyers);
         mGetAds = root.findViewById(R.id.button_get_ads);
         mGetOrders = root.findViewById(R.id.button_get_orders);
-        mGetBuyers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Sæki buyers", Toast.LENGTH_SHORT).show();
-                networkController.getBuyers(new NetworkCallback<List<Buyer>>() {
-                    @Override
-                    public void onError(String error) {
-                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onResponse(List<Buyer> buyers) {
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, buyers);
-                        mListView.setAdapter(arrayAdapter);
-                    }
-                });
-            }
-        });
-        mGetSellers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Sæki sellers", Toast.LENGTH_SHORT).show();
-                networkController.getSellers(new NetworkCallback<List<Seller>>() {
-                    @Override
-                    public void onError(String error) {
-                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onResponse(List<Seller> sellers) {
-                        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, sellers);
-                        mListView.setAdapter(arrayAdapter);
-                    }
-                });
-            }
-        });
 
         mGetAds.setOnClickListener(new View.OnClickListener() {
             @Override
