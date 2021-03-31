@@ -85,8 +85,8 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
         }
         ArrayList<String> chosenSellers = new ArrayList<>();
         if (sellerIndecies.size()==0) {
-            for (int i=0; i<sellers.length; i++) {
-                chosenSellers.add(sellers[i]);
+            for (Advertisement ad : advertisementArrayList) {
+                if (!chosenSellers.contains(ad.getSellerName())) chosenSellers.add(ad.getSellerName());
             }
         } else {
             for (int i=0; i<sellerIndecies.size(); i++) {

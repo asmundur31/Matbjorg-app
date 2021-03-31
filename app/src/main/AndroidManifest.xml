@@ -12,11 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Matbjorgapp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.AddAdvertisementActivity"></activity>
-        <activity android:name=".ui.AdvertisementActivity"></activity>
+        <activity android:name=".ui.CategoryActivity"></activity>
+        <activity android:name=".ui.AddAdvertisementActivity" />
+        <activity android:name=".ui.AdvertisementActivity" />
         <activity android:name=".ui.AdvertisementsActivity" />
-        <activity android:name=".ui.BasketActivity"></activity>
-        <activity android:name=".ui.SignupActivity"></activity>
+        <activity android:name=".ui.BasketActivity" />
+        <activity android:name=".ui.SignupActivity" />
         <activity android:name=".ui.LoginActivity" />
         <activity
             android:name=".MainActivity"

@@ -1,7 +1,5 @@
 package is.hi.hbv601g.matbjorg_app.models;
 
-import java.util.Arrays;
-
 public enum Tag {
     GRÆNMETI,
     MJÓLKURVARA,

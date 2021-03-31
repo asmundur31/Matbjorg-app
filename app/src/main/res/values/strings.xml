@@ -14,6 +14,7 @@
     <string name="welcome">"Welcome !"</string>
     <string name="login_failed">"Ekki tókst að innskrá notanda"</string>
     <string name="get_all_ads">Skoða allar auglýsingar</string>
+    <string name="get_categories">Flokkar</string>
     <string name="advertisments_title">Auglýsingar</string>
     <string name="button_add_to_cart">Bæta við körfu</string>
     <string name="basket_title">Karfa</string>

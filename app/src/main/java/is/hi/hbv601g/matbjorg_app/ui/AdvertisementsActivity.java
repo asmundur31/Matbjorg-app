@@ -87,6 +87,10 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                 mAdvertisementItems.setLayoutManager(new LinearLayoutManager(AdvertisementsActivity.this));
                 // Opnum search barinn þegar gögnin eru kominn
                 mSearchView.setIconifiedByDefault(false);
+                // Setjum category ef það er búið að velja það
+                if(getIntent().hasExtra("selected_category")) {
+                    addSelectedCategory();
+                }
             }
         });
 
@@ -273,6 +277,28 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                 dialog.show();
             }
         });
+    }
+
+    private void addSelectedCategory() {
+        Bundle extras = getIntent().getExtras();
+        String tag = (String) extras.get("selected_category");
+        // Finnum indexin á tag-inu
+        int index = -1;
+        for (int i=0; i<categoryArray.length; i++) {
+            if (categoryArray[i].equals(tag)) {
+                index = i;
+                break;
+            }
+        }
+        if (index > -1) {
+            // Bætum index-inum við CategoryList og selectedCategories
+            categoryList.add(index);
+            selectedCategories[index] = true;
+            mCategoryList.setText(tag);
+            AdvertisementItemsAdapter adapter = (AdvertisementItemsAdapter) mAdvertisementItems.getAdapter();
+            adapter.filter(searchQuery, categoryArray, categoryList, sellerArray, sellerList);
+            mCategoryList.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
