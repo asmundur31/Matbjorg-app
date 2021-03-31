@@ -75,8 +75,9 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
         // Ef categoryIndecies og sellerIndecies eru tóm þá jafngildir það að allt sé valið
         ArrayList<String> chosenTags = new ArrayList<>();
         if (categoryIndecies.size()==0) {
-            for (int i=0; i<categories.length; i++) {
-                chosenTags.add(categories[i]);
+            String[] tags = Tag.getTags();
+            for (int i=0; i<tags.length; i++) {
+                chosenTags.add(tags[i]);
             }
         } else {
             for (int i=0; i<categoryIndecies.size(); i++) {
