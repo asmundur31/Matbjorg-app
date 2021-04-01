@@ -52,7 +52,7 @@ import is.hi.hbv601g.matbjorg_app.models.User;
 
 public class NetworkController {
     private static final String TAG = "NetworkController";
-    public static final String URL_REST = "https://matbjorg.herokuapp.com/rest/";
+    public static final String URL_REST = "http://10.0.2.2:8080/rest/";
     // Remote linkur "https://matbjorg.herokuapp.com/rest/"
     // Local linkur "http://10.0.2.2:8080/rest/"
 

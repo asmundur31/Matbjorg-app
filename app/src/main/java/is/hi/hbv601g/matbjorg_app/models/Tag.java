@@ -15,4 +15,13 @@ public enum Tag {
     BAUNIR,
     VEGAN,
     GRÆNMETISFÆÐI;
+
+    public static String[] getTags() {
+        Tag[] tags = values();
+        String[] names = new String[tags.length];
+        for (int i = 0; i < tags.length; i++) {
+            names[i] = tags[i].name();
+        }
+        return names;
+    }
 }
