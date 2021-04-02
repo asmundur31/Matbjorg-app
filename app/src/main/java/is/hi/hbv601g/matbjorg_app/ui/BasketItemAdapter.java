@@ -77,7 +77,8 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
         holder.itemTitle.setText(mTitles.get(position));
         holder.itemSeller.setText("Söluaðili: " + mSellers.get(position));
         holder.itemDescription.setText("Lýsing: " + mDescription.get(position));
-        holder.itemAmount.setText(mAmount.get(position).toString());
+        int amount = mAmount.get(position).intValue();
+        holder.itemAmount.setText(amount+"");
         holder.itemPrice.setText("Verð: " + mPrice.get(position).toString());
         holder.itemExpireDate.setText("Gildir til: " + mExpireDate.get(position));
     }
