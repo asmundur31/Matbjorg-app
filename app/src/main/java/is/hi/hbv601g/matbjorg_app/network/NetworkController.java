@@ -23,6 +23,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ import java.time.ZoneId;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -350,10 +352,10 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
-    public void addAdvertisement(NetworkCallback<Advertisement> networkCallback, Long sellerId, String name,
-                                 String description, double originalAmount, double price, LocalDateTime expireDate) {
+    public void addAdvertisement(NetworkCallback<Advertisement> networkCallback, long sellerId, String name,
+                                 String description, double originalAmount, double price, LocalDateTime expireDate, String tags) {
 
-        String url = URL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s", sellerId.toString(), name, description, ""+originalAmount, ""+price, expireDate.toString());
+        String url = URL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s&tags=%s", ""+sellerId, name, description, ""+originalAmount, ""+price, expireDate.toString(), tags);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
