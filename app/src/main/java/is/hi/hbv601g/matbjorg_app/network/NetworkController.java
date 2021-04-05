@@ -19,10 +19,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -44,6 +46,7 @@ import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.models.Advertisement;
 import is.hi.hbv601g.matbjorg_app.models.Buyer;
+import is.hi.hbv601g.matbjorg_app.models.Location;
 import is.hi.hbv601g.matbjorg_app.models.Order;
 import is.hi.hbv601g.matbjorg_app.models.OrderItem;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
@@ -153,9 +156,28 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
-    public void signup(NetworkCallback<User> networkCallback, String type, String name, String email, String password) {
+    public void signup(NetworkCallback<User> networkCallback, String type, String name, String email, String password, List<Location> locations) {
         String url = URL_REST + String.format("signup?type=%s&name=%s&email=%s&password=%s", type, name, email, password);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+        JSONArray loc = new JSONArray();
+        for(int i=0; i<locations.size(); i++) {
+            JSONObject object = new JSONObject();
+            try {
+                object.put("longitude", locations.get(i).getLongitude());
+                object.put("latitude", locations.get(i).getLatitude());
+                object.put("name", locations.get(i).getName());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            loc.put(object);
+        }
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("locations", loc);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, postData.toString());
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(TAG, response.toString());
@@ -351,10 +373,19 @@ public class NetworkController {
     }
 
     public void addAdvertisement(NetworkCallback<Advertisement> networkCallback, Long sellerId, String name,
-                                 String description, double originalAmount, double price, LocalDateTime expireDate) {
-
-        String url = URL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s", sellerId.toString(), name, description, ""+originalAmount, ""+price, expireDate.toString());
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+                                 String description, double originalAmount, double price, LocalDateTime expireDate, List<String> tags, Location location) {
+        String url = URL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s&locationId=%s", sellerId.toString(), name, description, ""+originalAmount, ""+price, expireDate.toString(), location.getId());
+        JSONArray t = new JSONArray();
+        for(int i=0; i<tags.size(); i++) {
+            t.put(tags.get(i));
+        }
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("tags", t);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, postData, new Response.Listener<JSONObject>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(JSONObject response) {
@@ -380,6 +411,45 @@ public class NetworkController {
             }
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
 
+    public void getLocations(NetworkCallback<List<Location>> networkCallback) {
+        String url = URL_REST + "locations";
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                List<Location> locations = gson.fromJson(response.toString(), new TypeToken<List<Location>>(){}.getType());
+                networkCallback.onResponse(locations);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja gögn");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void getLocationsBySeller(NetworkCallback<List<Location>> networkCallback, long sellerId) {
+        String url = URL_REST + String.format("locations/%s", sellerId);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                List<Location> locations = gson.fromJson(response.toString(), new TypeToken<List<Location>>(){}.getType());
+                networkCallback.onResponse(locations);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja gögn");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 }

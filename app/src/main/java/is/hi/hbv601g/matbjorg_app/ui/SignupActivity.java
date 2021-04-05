@@ -1,7 +1,9 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,12 +13,16 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import is.hi.hbv601g.matbjorg_app.R;
-import is.hi.hbv601g.matbjorg_app.models.Buyer;
+import is.hi.hbv601g.matbjorg_app.models.Location;
 import is.hi.hbv601g.matbjorg_app.models.User;
 import is.hi.hbv601g.matbjorg_app.network.NetworkCallback;
 import is.hi.hbv601g.matbjorg_app.network.NetworkController;
@@ -34,6 +40,12 @@ public class SignupActivity extends AppCompatActivity {
     private RadioGroup mRadioGroup;
     private RadioButton mRadioButton;
     private boolean isType;
+    private Button mAddLocation;
+    private ListView mLocations;
+    private LocationAdapter locationAdapter;
+    private List<Location> locations = new ArrayList<>();
+    private boolean isSeller;
+    private static final int ADD_LOCATION = 0;
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, SignupActivity.class);
@@ -49,6 +61,8 @@ public class SignupActivity extends AppCompatActivity {
         mEmail = (EditText) findViewById(R.id.signup_username);
         mPassword = (EditText) findViewById(R.id.signup_password);
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        mAddLocation = (Button) findViewById(R.id.add_location);
+        mLocations = (ListView) findViewById(R.id.locations);
         mSignup = (Button) findViewById(R.id.signup);
 
         // Hlustarar til að passa að Nýskrá takki sé óvirkur ef það vantar upplýsingar
@@ -56,6 +70,19 @@ public class SignupActivity extends AppCompatActivity {
         addEmailTextChangeListener();
         addPasswordTextChangeListener();
         addTypeListener();
+
+        mAddLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = AddLocationActivity.newIntent(SignupActivity.this);
+                startActivityForResult(intent, ADD_LOCATION);
+            }
+        });
+
+        // Setjum tóman lista af staðsetningum inn í listView-ið
+        ArrayList<Location> arrayOfLocations = new ArrayList<Location>();
+        locationAdapter = new LocationAdapter(this, arrayOfLocations);
+        mLocations.setAdapter(locationAdapter);
 
         mSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +106,7 @@ public class SignupActivity extends AppCompatActivity {
                         Toast.makeText(SignupActivity.this, "Nýskráning gekk", Toast.LENGTH_SHORT).show();
                         finish();
                     }
-                }, mRadioButton.getText().toString(), mName.getText().toString(), mEmail.getText().toString(), mPassword.getText().toString());
+                }, mRadioButton.getText().toString(), mName.getText().toString(), mEmail.getText().toString(), mPassword.getText().toString(), locations);
             }
         });
     }
@@ -154,16 +181,47 @@ public class SignupActivity extends AppCompatActivity {
                 } else {
                     isType = true;
                 }
+                // Athugum hvort viðkomandi er söluaðili
+                RadioButton radioButton = findViewById(selectedId);
+                if (radioButton.getText().toString().equals("Seller")) {
+                    // Þá viljum við leyfa að velja staðsetningar
+                    mAddLocation.setVisibility(View.VISIBLE);
+                    isSeller = true;
+                } else {
+                    // Annars fjarlægjum við möguleikan
+                    mAddLocation.setVisibility(View.GONE);
+                    isSeller = false;
+                    // Hreinsum líka staðsetningar ef þær eru til
+                    locations.clear();
+                    locationAdapter.clear();
+                }
                 checkEverything();
             }
         });
     }
 
     private void checkEverything() {
-        if (isName && isEmail && isPassword && isType) {
+        if (isName && isEmail && isPassword && isType && (locations.size() > 0 || !isSeller)) {
             mSignup.setEnabled(true);
         } else {
             mSignup.setEnabled(false);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == ADD_LOCATION) {
+            if (data == null) {
+                return;
+            }
+            Location newLocation = AddLocationActivity.getChosenLocation(data);
+            locations.add(newLocation);
+            locationAdapter.add(newLocation);
+            checkEverything();
         }
     }
 }

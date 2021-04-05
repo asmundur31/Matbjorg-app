@@ -185,14 +185,12 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                         adapter.filter(searchQuery, categoryArray, categoryList, sellerArray, sellerList);
                     }
                 });
-
                 builder.setNegativeButton("Hætta við", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-
                 builder.setNeutralButton("Hreinsa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -251,14 +249,12 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                         adapter.filter(searchQuery, categoryArray, categoryList, sellerArray, sellerList);
                     }
                 });
-
                 builder.setNegativeButton("Hætta við", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-
                 builder.setNeutralButton("Hreinsa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
