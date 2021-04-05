@@ -27,6 +27,10 @@
     <string name="search_hint">Leita af vöru</string>
     <string name="categories">Vöruflokkar</string>
     <string name="sellers">Söluaðilar</string>
+    <string name="map_button_text">Kort</string>
+    <string name="add_location">Bæta við staðsetningu</string>
+    <string name="location">Staðsetning</string>
+    <string name="comfirm_location">Staðfesta</string>
     <string name="tag1">GRÆNMETI</string>
     <string name="tag2">MJÓLKURVARA</string>
     <string name="tag3">ÞURRVARA</string>

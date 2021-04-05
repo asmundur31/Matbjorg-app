@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.MapsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/seller_maps_dropdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sellers"
+            android:drawableRight="@drawable/arrow_drop_down"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_gravity="center"
+            android:textSize="20sp"/>
+
+        <fragment
+            android:id="@+id/map_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:name="is.hi.hbv601g.matbjorg_app.ui.MapsFragment"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
