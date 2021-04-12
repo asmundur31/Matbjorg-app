@@ -1,12 +1,14 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDateTime;
@@ -20,7 +22,6 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     private static final String TAG = "AdvertisementItemsAdapter";
 
     private ArrayList<String> mNames = new ArrayList<>();
-    // private ArrayList<String> mSellers = new ArrayList<>();
     private ArrayList<String> mDescription = new ArrayList<>();
     private ArrayList<Double> mCurrentAmount = new ArrayList<>();
     private ArrayList<Double> mPrice = new ArrayList<>();
@@ -28,6 +29,7 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     private Context context;
     private OnAdListener mOnAdListener;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public AdvertisementItemsAdapter(List<Advertisement> ads, Context context, OnAdListener onAdListener) {
         for (int i=0; i<ads.size(); i++) {
             this.mNames.add(ads.get(i).getName());

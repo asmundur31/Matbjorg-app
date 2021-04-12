@@ -52,7 +52,8 @@ import is.hi.hbv601g.matbjorg_app.models.User;
 
 public class NetworkController {
     private static final String TAG = "NetworkController";
-    public static final String URL_REST = "https://matbjorg.herokuapp.com/rest/";
+    // public static final String URL_REST = "https://matbjorg.herokuapp.com/rest/";
+    public static final String URL_REST = "http://10.0.2.2:8080/rest/";
     // Remote linkur "https://matbjorg.herokuapp.com/rest/"
     // Local linkur "http://10.0.2.2:8080/rest/"
 
@@ -381,5 +382,34 @@ public class NetworkController {
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
 
+    }
+
+    public void addToCart(NetworkCallback<OrderItem> networkCallback, long id, double amount, String token) {
+        String url = URL_REST + "orders/addToCart/"+ id + "?amount=" + amount + "&token=" + token;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                OrderItem orderItem = gson.fromJson(json, OrderItem.class);
+                networkCallback.onResponse(orderItem);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að bæta við körfu");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 }

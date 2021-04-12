@@ -1,12 +1,17 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +32,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
     private LinearLayout mAdvertisementItem;
     private static final int REQUEST_CODE_AD = 0;
     private List<Advertisement> mAds;
+    private String token;
 
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, AdvertisementsActivity.class);
@@ -42,8 +48,10 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
         mAdvertisementItems = (RecyclerView) findViewById(R.id.advertisement_items);
         mAdvertisementItem = (LinearLayout) findViewById(R.id.advertisement_item);
 
-        //SharedPreferences sharedPref = getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
-        // String token = sharedPref.getString("token", "");
+        // Sækjum token hjá innskráðum notanda
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
+        token = sharedPref.getString("token", "");
+
         NetworkController networkController = new NetworkController(this);
         networkController.getAdvertisements(new NetworkCallback<List<Advertisement>>() {
             @Override
@@ -51,6 +59,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                 Toast.makeText(AdvertisementsActivity.this, error, Toast.LENGTH_SHORT).show();
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(List<Advertisement> ads) {
                 mAds = ads;
@@ -58,22 +67,18 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                 mAdvertisementItems.setAdapter(adapter);
                 mAdvertisementItems.setLayoutManager(new LinearLayoutManager(AdvertisementsActivity.this));
             }
-        }
+          }
         );
-
-        /* mAdvertisementItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
-                startActivityForResult(intent, REQUEST_CODE_AD);
-            }
-        });*/ 
     }
 
     @Override
     public void onAdClick(int position) {
-        Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
-        intent.putExtra("selected_ad", mAds.get(position));
-        startActivityForResult(intent, REQUEST_CODE_AD);
+        Log.d(TAG, token);
+        if (!token.isEmpty()) {
+            Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
+            intent.putExtra("selected_ad", mAds.get(position));
+            intent.putExtra("token", token);
+            startActivityForResult(intent, REQUEST_CODE_AD);
+        }
     }
 }

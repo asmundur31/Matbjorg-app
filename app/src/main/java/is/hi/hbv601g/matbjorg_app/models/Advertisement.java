@@ -1,7 +1,10 @@
 package is.hi.hbv601g.matbjorg_app.models;
 
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class Advertisement implements Parcelable {
     private long id;
     private String name;
@@ -22,6 +26,7 @@ public class Advertisement implements Parcelable {
     private LocalDateTime createdAt;
     private Set<Tag> tags;
     private String pictureName;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     public Advertisement(long id, String name, String sellerName, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, Set<Tag> tags, String pictureName) {
         this.id = id;
@@ -46,6 +51,8 @@ public class Advertisement implements Parcelable {
         originalAmount = in.readDouble();
         currentAmount = in.readDouble();
         price = in.readDouble();
+        expireDate = LocalDateTime.parse(in.readString(), formatter);
+        createdAt = LocalDateTime.parse(in.readString(), formatter);
         pictureName = in.readString();
     }
 
@@ -189,6 +196,8 @@ public class Advertisement implements Parcelable {
         dest.writeDouble(originalAmount);
         dest.writeDouble(currentAmount);
         dest.writeDouble(price);
+        dest.writeString(String.valueOf(expireDate));
+        dest.writeString(String.valueOf(createdAt));
         dest.writeString(pictureName);
     }
 }
