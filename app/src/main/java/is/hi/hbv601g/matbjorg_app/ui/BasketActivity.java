@@ -1,5 +1,6 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -109,6 +111,7 @@ public class BasketActivity extends AppCompatActivity {
         mItemsInBasket = (RecyclerView) findViewById(R.id.items_in_basket);
         BasketItemAdapter adapter = new BasketItemAdapter(mItems, BasketActivity.this);
         adapter.setOnItemListener(new BasketItemAdapter.OnItemListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChangeAmountClick(int position, double newAmount) {
                 double currentAmount = order.getItems().get(position).getAdvertisement().getCurrentAmount();

@@ -1,5 +1,6 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -51,6 +55,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
     private LinearLayout mAdvertisementItem;
     private static final int REQUEST_CODE_AD = 0;
     private List<Advertisement> mAds;
+    private String token;
     private NetworkController networkController;
 
     public static Intent newIntent(Context packageContext) {
@@ -72,13 +77,20 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
         mAdvertisementItems = (RecyclerView) findViewById(R.id.advertisement_items);
         mAdvertisementItem = (LinearLayout) findViewById(R.id.advertisement_item);
 
+
+        // Sækjum token hjá innskráðum notanda
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
+        token = sharedPref.getString("token", "");
+
         networkController = new NetworkController(this);
+
         networkController.getAdvertisements(new NetworkCallback<List<Advertisement>>() {
             @Override
             public void onError(String error) {
                 Toast.makeText(AdvertisementsActivity.this, error, Toast.LENGTH_SHORT).show();
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(List<Advertisement> ads) {
                 mAds = ads;
@@ -185,14 +197,12 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                         adapter.filter(searchQuery, categoryArray, categoryList, sellerArray, sellerList);
                     }
                 });
-
                 builder.setNegativeButton("Hætta við", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-
                 builder.setNeutralButton("Hreinsa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -251,14 +261,12 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                         adapter.filter(searchQuery, categoryArray, categoryList, sellerArray, sellerList);
                     }
                 });
-
                 builder.setNegativeButton("Hætta við", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
-
                 builder.setNeutralButton("Hreinsa", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -303,9 +311,13 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
 
     @Override
     public void onAdClick(int position) {
-        Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
-        intent.putExtra("selected_ad", mAds.get(position));
-        startActivityForResult(intent, REQUEST_CODE_AD);
+        Log.d(TAG, token);
+        if (!token.isEmpty()) {
+            Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
+            intent.putExtra("selected_ad", mAds.get(position));
+            intent.putExtra("token", token);
+            startActivityForResult(intent, REQUEST_CODE_AD);
+        }
     }
 
     private void closeKeyboard() {
