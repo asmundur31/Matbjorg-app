@@ -70,13 +70,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:textSize="16dp"
         android:text="Velja gildistíma"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textinput_verd"
-        app:layout_constraintTop_toTopOf="@+id/textinput_verd" />
+        app:layout_constraintTop_toBottomOf="@+id/textinput_verd" />
 
     <TextView
         android:id="@+id/select_tags"
@@ -90,7 +91,7 @@
         android:textSize="20sp"
         android:textAlignment="center"
         android:drawableRight="@drawable/arrow_drop_down"
-        app:layout_constraintTop_toTopOf="@+id/textinput_gildistimi" />
+        app:layout_constraintTop_toTopOf="@+id/text_velja_gildistima" />
 
     <TextView
         android:id="@+id/select_location"
