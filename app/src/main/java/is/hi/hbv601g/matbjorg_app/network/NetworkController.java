@@ -353,9 +353,9 @@ public class NetworkController {
     }
 
     public void addAdvertisement(NetworkCallback<Advertisement> networkCallback, long sellerId, String name,
-                                 String description, double originalAmount, double price, LocalDateTime expireDate, String tags) {
+                                 String description, double originalAmount, double price, LocalDateTime expireDate) {
 
-        String url = URL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s&tags=%s", ""+sellerId, name, description, ""+originalAmount, ""+price, expireDate.toString(), tags);
+        String url = URL_REST + "advertisements/" + String.format("add?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s", ""+sellerId, name, description, ""+originalAmount, ""+price, expireDate.toString());
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -383,5 +383,34 @@ public class NetworkController {
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
 
+    }
+
+    public void getSellersAds(NetworkCallback<List<Advertisement>> networkCallback, long sellerId) {
+        String url = URL_REST +  "advertisements/" + String.format("seller?sellerId=%s", ""+sellerId);
+        JsonArrayRequest request =  new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Type collectionType = new TypeToken<List<Advertisement>>() {
+                }.getType();
+                List<Advertisement> advertisements = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(advertisements);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja auglýsingar");
+            }
+        });
     }
 }

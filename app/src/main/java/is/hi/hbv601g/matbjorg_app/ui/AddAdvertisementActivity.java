@@ -54,8 +54,8 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     private TextView mTextViewExpireDate;
     private DatePickerDialog.OnDateSetListener mOnDateSetListener;
     private Button mButtonConfirm;
-    private String[] tagNames = Tag.getTags();
-    private ArrayList<Tag> tags = new ArrayList<>();
+    //private String[] tagNames = Tag.getTags();
+    //private ArrayList<Tag> tags = new ArrayList<>();
 
 
     public static Intent newIntent(Context packageContext) {
@@ -121,7 +121,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                                                                finish();
                                                            }
                                                        }, loggedin_user_id, mEditTextName.getText().toString(), mEditTextDesc.getText().toString(), Double.parseDouble(mEditTextAmount.getText().toString()),
-                            Double.parseDouble(mEditTextPrice.getText().toString()), LocalDateTime.parse(mTextViewExpireDate.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")), generateTagString(tags));
+                            Double.parseDouble(mEditTextPrice.getText().toString()), LocalDateTime.parse(mTextViewExpireDate.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
                 }
             }
         });
@@ -152,132 +152,4 @@ public class AddAdvertisementActivity extends AppCompatActivity {
         return true;
     }
 
-    public String generateTagString(ArrayList<Tag> tags){
-        String s = "";
-        for(Tag tag:tags){
-            s = s.concat(tag.name()).concat(",");
-        }
-        return (s == null || s.length() == 0) ? "" : (s.substring(0, s.length() - 1));
-    }
-
-    public void onCheckBoxClicked(View view) {
-        // Is the view now checked?
-        boolean checked = ((CheckBox) view).isChecked();
-
-        // Check which checkbox was clicked
-        switch(view.getId()) {
-            case R.id.checkbox_tag1:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[0]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[0]));
-                }
-                break;
-            case R.id.checkbox_tag2:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[1]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[1]));
-                }
-                break;
-            case R.id.checkbox_tag3:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[2]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[2]));
-                }
-                break;
-            case R.id.checkbox_tag4:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[3]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[3]));
-                }
-                break;
-            case R.id.checkbox_tag5:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[4]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[4]));
-                }
-                break;
-            case R.id.checkbox_tag6:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[5]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[5]));
-                }
-                break;
-            case R.id.checkbox_tag7:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[6]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[6]));
-                }
-                break;
-            case R.id.checkbox_tag8:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[7]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[7]));
-                }
-                break;
-            case R.id.checkbox_tag9:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[8]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[8]));
-                }
-                break;
-            case R.id.checkbox_tag10:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[9]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[9]));
-                }
-                break;
-            case R.id.checkbox_tag11:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[10]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[10]));
-                }
-                break;
-            case R.id.checkbox_tag12:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[11]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[11]));
-                }
-                break;
-            case R.id.checkbox_tag13:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[12]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[12]));
-                }
-                break;
-            case R.id.checkbox_tag14:
-                if (checked) {
-                    tags.add(Tag.valueOf(tagNames[13]));
-                }
-                else {
-                    tags.remove(Tag.valueOf(tagNames[13]));
-                }
-                break;
-        }
-    }
 }
