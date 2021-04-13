@@ -57,9 +57,12 @@ public class AdvertisementActivity extends AppCompatActivity {
         networkController = new NetworkController(this);
         Intent intent = getIntent();
 
+
         if(intent.hasExtra("selected_ad")) {
             Advertisement advertisement = intent.getParcelableExtra("selected_ad");
             Log.d(TAG, "onCreate: " + advertisement.toString());
+            // Hér er aðgengi að Location, Tags og búið er að laga að expireDate skili null
+            // TODO: Laga útlit og birta kannski location og tags líka
 
             mName.setText(advertisement.getName());
             mPrice.setText("Verð: " + advertisement.getPrice());

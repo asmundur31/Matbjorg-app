@@ -85,163 +85,35 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textinput_verd"
-        app:layout_constraintTop_toTopOf="@+id/textinput_verd"
-        />
+        app:layout_constraintTop_toTopOf="@+id/textinput_verd" />
 
-    <CheckBox android:id="@+id/checkbox_tag1"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/select_tags"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag1"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textinput_gildistimi"/>
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/categories"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:drawableRight="@drawable/arrow_drop_down"
+        app:layout_constraintTop_toTopOf="@+id/textinput_gildistimi" />
 
-    <CheckBox android:id="@+id/checkbox_tag2"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/select_location"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag2"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@+id/checkbox_tag1"
-        app:layout_constraintTop_toTopOf="@+id/textinput_gildistimi"/>
-
-    <CheckBox android:id="@+id/checkbox_tag3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag3"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@+id/checkbox_tag2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textinput_gildistimi"/>
-
-    <CheckBox android:id="@+id/checkbox_tag4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag4"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag1"/>
-
-    <CheckBox android:id="@+id/checkbox_tag5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag5"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@id/checkbox_tag4"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag1"/>
-
-    <CheckBox android:id="@+id/checkbox_tag6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag5"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@id/checkbox_tag5"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag1"/>
-
-    <CheckBox android:id="@+id/checkbox_tag7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag7"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag4"/>
-
-    <CheckBox android:id="@+id/checkbox_tag8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag5"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@id/checkbox_tag7"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag4"/>
-
-    <CheckBox android:id="@+id/checkbox_tag9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag9"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@id/checkbox_tag8"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag4"/>
-
-    <CheckBox android:id="@+id/checkbox_tag10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag7"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag7"/>
-
-    <CheckBox android:id="@+id/checkbox_tag11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag11"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@id/checkbox_tag10"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag7"/>
-
-    <CheckBox android:id="@+id/checkbox_tag12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag12"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@id/checkbox_tag11"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag7"/>
-
-    <CheckBox android:id="@+id/checkbox_tag13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag13"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag10"/>
-
-    <CheckBox android:id="@+id/checkbox_tag14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="12dp"
-        android:text="@string/tag14"
-        android:onClick="onCheckBoxClicked"
-        app:layout_constraintStart_toEndOf="@id/checkbox_tag13"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_tag10"/>
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/location"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:drawableRight="@drawable/arrow_drop_down"
+        app:layout_constraintTop_toTopOf="@+id/select_tags" />
 
     <Button
         android:id="@+id/button_staðfesta_auglýsingu"
@@ -252,7 +124,7 @@
         android:layout_marginEnd="24dp"
         android:text="Staðfesta"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/checkbox_tag13"
-        app:layout_constraintTop_toTopOf="@+id/checkbox_tag13"/>
+        app:layout_constraintStart_toEndOf="@+id/select_location"
+        app:layout_constraintTop_toTopOf="@+id/select_location"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

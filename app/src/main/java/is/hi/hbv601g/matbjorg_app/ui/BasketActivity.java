@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -56,6 +57,7 @@ public class BasketActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
         String token = sharedPref.getString("token", "");
         networkController = new NetworkController(this);
+        mBasket.setVisibility(View.GONE);
         networkController.getActiveOrder(new NetworkCallback<Order>() {
             @Override
             public void onError(String error) {
@@ -65,12 +67,11 @@ public class BasketActivity extends AppCompatActivity {
             @Override
             public void onResponse(Order order) {
                 String title = "";
-                if (order.getItems().size() == 0) {
-                    title = "Karfan er tóm";
-                    mBasket.setVisibility(View.GONE);
-                } else {
+                if (order.getItems().size() > 0) {
                     title = "Karfa";
                     mBasket.setVisibility(View.VISIBLE);
+                } else {
+                    title = "Karfan er tóm";
                 }
                 mBasketTitle.setText(title);
                 mItems = order.getItems();
@@ -131,13 +132,20 @@ public class BasketActivity extends AppCompatActivity {
                         Toast.makeText(BasketActivity.this, "Tókst að breyta", Toast.LENGTH_SHORT).show();
                     }
                 }, mItems.get(position).getId(), newAmount, token);
+
                 mItems.get(position).setAmount(newAmount);
                 if (newAmount <= 0) {
                     // Þegar við viljum eyða itemi
                     mItems.remove(position);
                     mItemsInBasket.removeViewAt(position);
+                    // Athugum hvort karfan sé tóm
+                    if (mItems.size() == 0) {
+                        mBasketTitle.setText("Karfan er tóm");
+                        mBasket.setVisibility(View.GONE);
+                    }
                 }
                 adapter.updateAmount(position, newAmount);
+                closeKeyboard();
             }
 
             @Override
@@ -158,11 +166,22 @@ public class BasketActivity extends AppCompatActivity {
                 mItems.remove(position);
                 mItemsInBasket.removeViewAt(position);
                 adapter.updateAmount(position, 0);
+                // Athugum hvort karfan sé tóm
+                if (mItems.size() == 0) {
+                    mBasketTitle.setText("Karfan er tóm");
+                    mBasket.setVisibility(View.GONE);
+                }
             }
         });
         mItemsInBasket.setAdapter(adapter);
         mItemsInBasket.setLayoutManager(new LinearLayoutManager(BasketActivity.this));
     }
 
-
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }

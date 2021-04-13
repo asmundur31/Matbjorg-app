@@ -14,31 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.models.Advertisement;
+import is.hi.hbv601g.matbjorg_app.models.Tag;
 
 public class AdvertisementItemsAdapter extends RecyclerView.Adapter<AdvertisementItemsAdapter.ViewHolder> {
     private static final String TAG = "AdvertisementItemsAdapter";
-
-    private ArrayList<String> mNames = new ArrayList<>();
-    private ArrayList<String> mDescription = new ArrayList<>();
-    private ArrayList<Double> mCurrentAmount = new ArrayList<>();
-    private ArrayList<Double> mPrice = new ArrayList<>();
-    private ArrayList<LocalDateTime> mExpireDate = new ArrayList<>();
+    
+    private List<Advertisement> mAdvertisements = new ArrayList<>();
+    // advertisementArrayList inniheldur allar auglýsingar
+    private ArrayList<Advertisement> advertisementArrayList = new ArrayList<>();
     private Context context;
     private OnAdListener mOnAdListener;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public AdvertisementItemsAdapter(List<Advertisement> ads, Context context, OnAdListener onAdListener) {
-        for (int i=0; i<ads.size(); i++) {
-            this.mNames.add(ads.get(i).getName());
-            // this.mSellers.add(ads.get(i).getSellerName());
-            this.mDescription.add(ads.get(i).getDescription());
-            this.mCurrentAmount.add(ads.get(i).getCurrentAmount());
-            this.mPrice.add(ads.get(i).getPrice());
-            this.mExpireDate.add(ads.get(i).getExpireDate());
-        }
+        this.advertisementArrayList.addAll(ads);
+        this.mAdvertisements = ads;
         this.context = context;
         this.mOnAdListener = onAdListener;
     }
@@ -53,17 +47,76 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.itemName.setText(mNames.get(position));
+        holder.itemName.setText(mAdvertisements.get(position).getName());
         // holder.itemSeller.setText("Söluaðili: " + mSellers.get(position));
-        holder.itemDescription.setText("Lýsing: " + mDescription.get(position));
-        holder.itemCurrentAmount.setText("Magn: " + mCurrentAmount.get(position).toString());
-        holder.itemPrice.setText("Verð: " + mPrice.get(position).toString());
-        holder.itemExpireDate.setText("Gildir til: " + mExpireDate.get(position));
+        holder.itemDescription.setText("Lýsing: " + mAdvertisements.get(position).getDescription());
+        holder.itemCurrentAmount.setText("Magn: " + mAdvertisements.get(position).getCurrentAmount());
+        holder.itemPrice.setText("Verð: " + mAdvertisements.get(position).getPrice());
+        holder.itemExpireDate.setText("Gildir til: " + mAdvertisements.get(position).getExpireDate());
     }
 
     @Override
     public int getItemCount() {
-        return mNames.size();
+        return mAdvertisements.size();
+    }
+
+    /**
+     * Fall sem filterar auglýsingar eftir streng, vöruflokk og söluaðila
+     * @param charText strengur sem leitað er eftir
+     * @param categories Allir vöruflokkar
+     * @param categoryIndecies indecies á valda vöruflokka
+     * @param sellers Allir sellers
+     * @param sellerIndecies indecies á valda söluaðila
+     */
+    public void filter(String charText, String[] categories, ArrayList<Integer> categoryIndecies, String[] sellers, ArrayList<Integer> sellerIndecies) {
+        // Ef ekkert er skrifað í charText setjum við tómastrenginn til að losan við null point villur
+        if(charText == null) {
+            charText = "";
+        } else {
+            charText = charText.toLowerCase(Locale.getDefault());
+        }
+        // Ef categoryIndecies og sellerIndecies eru tóm þá jafngildir það að allt sé valið
+        ArrayList<String> chosenTags = new ArrayList<>();
+        if (categoryIndecies.size()==0) {
+            String[] tags = Tag.getTags();
+            for (int i=0; i<tags.length; i++) {
+                chosenTags.add(tags[i]);
+            }
+        } else {
+            for (int i=0; i<categoryIndecies.size(); i++) {
+                chosenTags.add(categories[categoryIndecies.get(i)]);
+            }
+        }
+        ArrayList<String> chosenSellers = new ArrayList<>();
+        if (sellerIndecies.size()==0) {
+            for (Advertisement ad : advertisementArrayList) {
+                if (!chosenSellers.contains(ad.getSellerName())) chosenSellers.add(ad.getSellerName());
+            }
+        } else {
+            for (int i=0; i<sellerIndecies.size(); i++) {
+                chosenSellers.add(sellers[sellerIndecies.get(i)]);
+            }
+        }
+        mAdvertisements.clear();
+        // Ef texti er tómur, chosenTags er tómt og chosenSellers er tómt þá birtum við allt
+        if (charText.length() == 0 && chosenTags.size() == 0 && chosenSellers.size() == 0) {
+            mAdvertisements.addAll(advertisementArrayList);
+        } else {
+            for (Advertisement ad : advertisementArrayList) {
+                // Fyrir hverja auglýsingu athugum við hvort charText sé í nafni auglýsingar og
+                // hvort seller auglýsingu sé í chosenSeller
+                if (ad.getName().toLowerCase(Locale.getDefault()).contains(charText) && chosenSellers.contains(ad.getSellerName())) {
+                    // athugum fyrir hvert tag í auglýsingu hvort það sé í chosenTags
+                    for (Tag tag : ad.getTags()) {
+                        if (chosenTags.contains(tag.toString())) {
+                            mAdvertisements.add(ad);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

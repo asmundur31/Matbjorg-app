@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.ui.BasketActivity;
 import is.hi.hbv601g.matbjorg_app.ui.LoginActivity;
+import is.hi.hbv601g.matbjorg_app.ui.MapsActivity;
+import is.hi.hbv601g.matbjorg_app.ui.MapsFragment;
 import is.hi.hbv601g.matbjorg_app.ui.SignupActivity;
 
 public class MenuFragment extends Fragment {
@@ -26,10 +28,12 @@ public class MenuFragment extends Fragment {
     private Button mSignupButton;
     private Button mLogoutButton;
     private Button mBasketButton;
+    private Button mMapButton;
     private static final int REQUEST_CODE_LOGIN = 0;
     private static final int REQUEST_CODE_NOT_LOGGED_IN = 1;
     private static final int REQUEST_CODE_BASKET = 2;
     private static final int REQUEST_CODE_SIGNUP = 3;
+    private static final int REQUEST_CODE_MAP = 4;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_menu, container, false);
@@ -81,6 +85,15 @@ public class MenuFragment extends Fragment {
                 Log.d(TAG, "Notandi er loggaður inn");
                 Intent intent = BasketActivity.newIntent(getActivity());
                 startActivityForResult(intent, REQUEST_CODE_BASKET);
+            }
+        });
+
+        mMapButton = (Button) root.findViewById(R.id.map_button);
+        mMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = MapsActivity.newIntent(getActivity());
+                startActivityForResult(intent, REQUEST_CODE_MAP);
             }
         });
 

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -26,9 +27,12 @@ public class Advertisement implements Parcelable {
     private LocalDateTime createdAt;
     private Set<Tag> tags;
     private String pictureName;
+    private Location location;
+
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
-    public Advertisement(long id, String name, String sellerName, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, Set<Tag> tags, String pictureName) {
+
+    public Advertisement(long id, String name, String sellerName, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, Set<Tag> tags, String pictureName, Location location) {
         this.id = id;
         this.name = name;
         this.sellerName = sellerName;
@@ -41,8 +45,10 @@ public class Advertisement implements Parcelable {
         this.createdAt = createdAt;
         this.tags = tags;
         this.pictureName = pictureName;
+        this.location = location;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     protected Advertisement(Parcel in) {
         id = in.readLong();
         name = in.readString();
@@ -53,10 +59,13 @@ public class Advertisement implements Parcelable {
         price = in.readDouble();
         expireDate = LocalDateTime.parse(in.readString(), formatter);
         createdAt = LocalDateTime.parse(in.readString(), formatter);
+        tags = (Set<Tag>) in.readSerializable();
         pictureName = in.readString();
+        location = in.readParcelable(Location.class.getClassLoader());
     }
 
     public static final Creator<Advertisement> CREATOR = new Creator<Advertisement>() {
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public Advertisement createFromParcel(Parcel in) {
             return new Advertisement(in);
@@ -163,30 +172,21 @@ public class Advertisement implements Parcelable {
     public void setPictureName(String pictureName) {
         this.pictureName = pictureName;
     }
-/*
-    @Override
-    public String toString() {
-        return "Advertisement{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", active=" + active +
-                ", originalAmount=" + originalAmount +
-                ", currentAmount=" + currentAmount +
-                ", price=" + price +
-                ", expireDate=" + expireDate +
-                ", createdAt=" + createdAt +
-                ", items=" + items +
-                ", tags=" + tags +
-                ", pictureName='" + pictureName + '\'' +
-                '}';
-    }*/
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     @Override
     public int describeContents() {
         return 0;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
@@ -198,6 +198,8 @@ public class Advertisement implements Parcelable {
         dest.writeDouble(price);
         dest.writeString(String.valueOf(expireDate));
         dest.writeString(String.valueOf(createdAt));
+        dest.writeSerializable((Serializable) tags);
         dest.writeString(pictureName);
+        dest.writeParcelable(location, flags);
     }
 }
