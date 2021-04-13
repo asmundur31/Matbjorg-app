@@ -23,65 +23,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
+        android:textSize="16dp"
         android:hint="Heiti"
         android:inputType="text"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text_settu_inn_upplysingar"
-        app:layout_constraintTop_toTopOf="@+id/text_settu_inn_upplysingar"/>
+        app:layout_constraintTop_toBottomOf="@+id/text_settu_inn_upplysingar"/>
 
     <EditText
         android:id="@+id/textinput_lysing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
+        android:textSize="16dp"
         android:hint="Lýsing"
         android:inputType="textMultiLine"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textinput_heiti"
-        app:layout_constraintTop_toTopOf="@+id/textinput_heiti"/>
+        app:layout_constraintTop_toBottomOf="@+id/textinput_heiti"/>
     <EditText
         android:id="@+id/textinput_magn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
+        android:textSize="16dp"
         android:hint="Magn"
         android:inputType="numberDecimal"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textinput_lysing"
-        app:layout_constraintTop_toTopOf="@+id/textinput_lysing"/>
+        app:layout_constraintTop_toBottomOf="@+id/textinput_lysing"/>
 
     <EditText
         android:id="@+id/textinput_verd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
+        android:textSize="16dp"
         android:hint="Verð"
         android:inputType="numberDecimal"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textinput_magn"
-        app:layout_constraintTop_toTopOf="@+id/textinput_magn"/>
+        app:layout_constraintTop_toBottomOf="@+id/textinput_magn"/>
 
-    <EditText
-        android:id="@+id/textinput_gildistimi"
+    <TextView
+        android:id="@+id/text_velja_gildistima"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="48dp"
         android:layout_marginEnd="24dp"
-        android:hint="Gildir til 'YYYY-MM-DD HH:MM'"
-        android:inputType="text"
+        android:textSize="16dp"
+        android:text="Velja gildistíma"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textinput_verd"
@@ -120,11 +111,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="64dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
         android:text="Staðfesta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/select_location"
         app:layout_constraintTop_toTopOf="@+id/select_location"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

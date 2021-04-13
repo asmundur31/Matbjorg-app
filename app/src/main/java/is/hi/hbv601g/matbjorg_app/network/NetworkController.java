@@ -36,6 +36,7 @@ import java.time.ZoneId;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -481,5 +482,34 @@ public class NetworkController {
             }
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void getSellersAds(NetworkCallback<List<Advertisement>> networkCallback, long sellerId) {
+        String url = URL_REST +  "advertisements/" + String.format("seller?sellerId=%s", ""+sellerId);
+        JsonArrayRequest request =  new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Type collectionType = new TypeToken<List<Advertisement>>() {
+                }.getType();
+                List<Advertisement> advertisements = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(advertisements);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja auglýsingar");
+            }
+        });
     }
 }
