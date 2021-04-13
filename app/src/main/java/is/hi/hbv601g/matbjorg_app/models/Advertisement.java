@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class Advertisement implements Parcelable {
     private long id;
     private String name;
@@ -27,6 +28,9 @@ public class Advertisement implements Parcelable {
     private Set<Tag> tags;
     private String pictureName;
     private Location location;
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
 
     public Advertisement(long id, String name, String sellerName, String description, boolean active, double originalAmount, double currentAmount, double price, LocalDateTime expireDate, LocalDateTime createdAt, Set<Tag> tags, String pictureName, Location location) {
         this.id = id;
@@ -53,8 +57,8 @@ public class Advertisement implements Parcelable {
         originalAmount = in.readDouble();
         currentAmount = in.readDouble();
         price = in.readDouble();
-        expireDate = (LocalDateTime) in.readSerializable();
-        createdAt = (LocalDateTime) in.readSerializable();
+        expireDate = LocalDateTime.parse(in.readString(), formatter);
+        createdAt = LocalDateTime.parse(in.readString(), formatter);
         tags = (Set<Tag>) in.readSerializable();
         pictureName = in.readString();
         location = in.readParcelable(Location.class.getClassLoader());
@@ -192,8 +196,8 @@ public class Advertisement implements Parcelable {
         dest.writeDouble(originalAmount);
         dest.writeDouble(currentAmount);
         dest.writeDouble(price);
-        dest.writeSerializable(expireDate);
-        dest.writeSerializable(createdAt);
+        dest.writeString(String.valueOf(expireDate));
+        dest.writeString(String.valueOf(createdAt));
         dest.writeSerializable((Serializable) tags);
         dest.writeString(pictureName);
         dest.writeParcelable(location, flags);
