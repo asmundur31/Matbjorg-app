@@ -70,6 +70,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     private String[] locationStrings;
     private List<Location> locationsArray = new ArrayList<>();
     private Location chosenLocation;
+    private int selectedLocation = -1;
     private Button mButtonConfirm;
     private NetworkController networkController;
 
@@ -210,6 +211,9 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                         for (int i = 0; i < categoryIndices.size(); i++) {
                             chosenTags.add(categoryStrings[categoryIndices.get(i)]);
                         }
+                        if (chosenTags.size() > 0) {
+                            mTextViewCategories.setError(null);
+                        }
                     }
                 });
                 builder.setNegativeButton("Hætta við", new DialogInterface.OnClickListener() {
@@ -241,10 +245,11 @@ public class AddAdvertisementActivity extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AddAdvertisementActivity.this);
                 builder.setTitle("Veldu staðsetningu");
-                builder.setSingleChoiceItems(locationStrings, -1, new DialogInterface.OnClickListener() {
+                builder.setSingleChoiceItems(locationStrings, selectedLocation, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         chosenLocation = locationsArray.get(which);
+                        selectedLocation = which;
                     }
                 });
                 builder.setCancelable(false);
@@ -252,15 +257,18 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                 builder.setPositiveButton("Velja", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        chosenTags.clear();
-                        for (int i = 0; i < categoryIndices.size(); i++) {
-                            chosenTags.add(categoryStrings[categoryIndices.get(i)]);
+                        if (selectedLocation == -1) {
+                            chosenLocation = null;
+                        } else {
+                            mTextViewLocation.setError(null);
                         }
                     }
                 });
                 builder.setNegativeButton("Hætta við", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        chosenLocation = null;
+                        selectedLocation = -1;
                         dialog.dismiss();
                     }
                 });
@@ -289,8 +297,16 @@ public class AddAdvertisementActivity extends AppCompatActivity {
             mEditTextPrice.setError("Gefðu vörunni verð");
             return false;
         }
-        if(mTextViewExpireDate.getText().toString().equals("Velja gildistíma")){
+        if(mTextViewExpireDate.getText().toString().equals("Velja gildistíma")) {
             mTextViewExpireDate.setError("Veldu gildistíma");
+            return false;
+        }
+        if (categoryIndices.size() == 0) {
+            mTextViewCategories.setError("Veldu a.m.k. einn vöruflokk");
+            return false;
+        }
+        if (chosenLocation == null) {
+            mTextViewLocation.setError("Veldu staðsetningu");
             return false;
         }
         return true;
