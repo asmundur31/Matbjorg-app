@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.R;
@@ -60,6 +61,9 @@ public class ProfileFragment extends Fragment {
                 mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
                 mTextPantanir.setText("Þínar pantanir:");
                 Toast.makeText(getActivity(), "Sæki pantanir notanda", Toast.LENGTH_SHORT).show();
+                List<Order> orders = new ArrayList<>();
+                ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, orders);
+                mListView.setAdapter(arrayAdapter);
                 networkController.getBuyerOrders(new NetworkCallback<List<Order>>() {
                                                      @Override
                                                      public void onError(String error) {
@@ -68,8 +72,9 @@ public class ProfileFragment extends Fragment {
 
                                                      @Override
                                                      public void onResponse(List<Order> orders) {
-                                                         ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, orders);
-                                                         mListView.setAdapter(arrayAdapter);
+                                                         ArrayAdapter arrayAdapter = (ArrayAdapter) mListView.getAdapter();
+                                                         arrayAdapter.addAll(orders);
+                                                         arrayAdapter.notifyDataSetChanged();
                                                      }
                                                  }, loggedin_user_id
                 );

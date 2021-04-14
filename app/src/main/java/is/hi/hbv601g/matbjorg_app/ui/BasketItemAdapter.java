@@ -1,6 +1,7 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDateTime;
@@ -31,6 +33,7 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
     private Context context;
     private OnItemListener listener;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public BasketItemAdapter(List<OrderItem> items, Context context) {
         for (int i=0; i<items.size(); i++) {
             this.mTitles.add(items.get(i).getAdvertisement().getName());

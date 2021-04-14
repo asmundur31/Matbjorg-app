@@ -29,7 +29,6 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     private OnAdListener mOnAdListener;
 
     public AdvertisementItemsAdapter(List<Advertisement> ads, Context context, OnAdListener onAdListener) {
-        this.advertisementArrayList.addAll(ads);
         this.mAdvertisements = ads;
         this.context = context;
         this.mOnAdListener = onAdListener;
@@ -57,6 +56,17 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     @Override
     public int getItemCount() {
         return mAdvertisements.size();
+    }
+
+    public void setAdvertisements(List<Advertisement> advertisements) {
+        mAdvertisements.clear();
+        mAdvertisements.addAll(advertisements);
+        notifyDataSetChanged();
+    }
+
+    public void setAllAdvertisements(List<Advertisement> advertisements) {
+        advertisementArrayList.clear();
+        advertisementArrayList.addAll(advertisements);
     }
 
     /**
