@@ -31,6 +31,9 @@
     <string name="add_location">Bæta við staðsetningu</string>
     <string name="location">Staðsetning</string>
     <string name="comfirm_location">Staðfesta</string>
+    <string name="review_text">Umsagnir</string>
+    <string name="new_review">Ný umsögn</string>
+    <string name="submit_review">Staðfesta umsögn</string>
     <string name="tag1">GRÆNMETI</string>
     <string name="tag2">MJÓLKURVARA</string>
     <string name="tag3">ÞURRVARA</string>

@@ -28,7 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +52,7 @@ import is.hi.hbv601g.matbjorg_app.models.Buyer;
 import is.hi.hbv601g.matbjorg_app.models.Location;
 import is.hi.hbv601g.matbjorg_app.models.Order;
 import is.hi.hbv601g.matbjorg_app.models.OrderItem;
+import is.hi.hbv601g.matbjorg_app.models.Review;
 import is.hi.hbv601g.matbjorg_app.models.Seller;
 import is.hi.hbv601g.matbjorg_app.models.Tag;
 import is.hi.hbv601g.matbjorg_app.models.User;
@@ -511,5 +514,51 @@ public class NetworkController {
                 networkCallback.onError("Gekk ekki að sækja auglýsingar");
             }
         });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void addReview(NetworkCallback<Review> networkCallback, long sellerId, String token, String review, double rating) {
+        String url = URL_REST +  "reviews/add";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("sellerId", ""+sellerId);
+        params.put("token", token);
+        params.put("review", review);
+        params.put("rating", ""+rating);
+        JSONObject postData = new JSONObject(params);
+        JsonObjectRequest request =  new JsonObjectRequest(Request.Method.POST, url, postData, new Response.Listener<JSONObject>() {
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                Review review = gson.fromJson(response.toString(), Review.class);
+                networkCallback.onResponse(review);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja auglýsingar");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void getReviewsBySeller(NetworkCallback<List<Review>> networkCallback, long sellerId) {
+        String url = URL_REST +  "reviews/" + sellerId;
+
+        JsonArrayRequest request =  new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                List<Review> reviews = gson.fromJson(response.toString(), new TypeToken<List<Review>>(){}.getType());
+                networkCallback.onResponse(reviews);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja auglýsingar");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 }

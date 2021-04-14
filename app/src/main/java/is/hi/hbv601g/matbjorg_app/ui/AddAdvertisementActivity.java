@@ -79,6 +79,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
         Intent intent = new Intent(packageContext, AddAdvertisementActivity.class);
         return intent;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

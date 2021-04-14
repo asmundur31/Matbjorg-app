@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Matbjorgapp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.AddLocationActivity"></activity>
+        <activity android:name=".ui.AddReviewActivity"></activity>
+        <activity android:name=".ui.ReviewActivity" />
+        <activity android:name=".ui.AddLocationActivity" />
         <activity android:name=".ui.MapsActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

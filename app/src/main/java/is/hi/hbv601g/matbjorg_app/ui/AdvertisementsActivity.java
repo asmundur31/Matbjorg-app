@@ -120,6 +120,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                 return false;
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public boolean onQueryTextChange(String newText) {
                 // Uppfæra auglýsinga listann
@@ -178,6 +179,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                 });
                 builder.setCancelable(false);
                 builder.setPositiveButton("Velja", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String item = "";
@@ -204,6 +206,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                     }
                 });
                 builder.setNeutralButton("Hreinsa", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0; i < selectedCategories.length; i++) {
@@ -242,6 +245,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                 });
                 builder.setCancelable(false);
                 builder.setPositiveButton("Velja", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String item = "";
@@ -268,6 +272,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
                     }
                 });
                 builder.setNeutralButton("Hreinsa", new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0; i < selectedSellers.length; i++) {
@@ -287,6 +292,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void addSelectedCategory() {
         Bundle extras = getIntent().getExtras();
         String tag = (String) extras.get("selected_category");

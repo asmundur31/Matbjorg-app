@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +28,6 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     private Context context;
     private OnAdListener mOnAdListener;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public AdvertisementItemsAdapter(List<Advertisement> ads, Context context, OnAdListener onAdListener) {
         this.advertisementArrayList.addAll(ads);
         this.mAdvertisements = ads;
@@ -45,6 +43,7 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
         return holder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.itemName.setText(mAdvertisements.get(position).getName());
@@ -68,6 +67,7 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
      * @param sellers Allir sellers
      * @param sellerIndecies indecies á valda söluaðila
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void filter(String charText, String[] categories, ArrayList<Integer> categoryIndecies, String[] sellers, ArrayList<Integer> sellerIndecies) {
         // Ef ekkert er skrifað í charText setjum við tómastrenginn til að losan við null point villur
         if(charText == null) {
