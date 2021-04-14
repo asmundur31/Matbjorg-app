@@ -54,7 +54,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
     private RecyclerView mAdvertisementItems;
     private LinearLayout mAdvertisementItem;
     private static final int REQUEST_CODE_AD = 0;
-    private List<Advertisement> mAds;
+    private List<Advertisement> mAds = new ArrayList<>();
     private String token;
     private NetworkController networkController;
 
@@ -84,6 +84,10 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
 
         networkController = new NetworkController(this);
 
+        AdvertisementItemsAdapter adapter = new AdvertisementItemsAdapter(mAds, AdvertisementsActivity.this, AdvertisementsActivity.this);
+        mAdvertisementItems.setAdapter(adapter);
+        mAdvertisementItems.setLayoutManager(new LinearLayoutManager(AdvertisementsActivity.this));
+
         networkController.getAdvertisements(new NetworkCallback<List<Advertisement>>() {
             @Override
             public void onError(String error) {
@@ -94,9 +98,9 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
             @Override
             public void onResponse(List<Advertisement> ads) {
                 mAds = ads;
-                AdvertisementItemsAdapter adapter = new AdvertisementItemsAdapter(mAds, AdvertisementsActivity.this, AdvertisementsActivity.this);
-                mAdvertisementItems.setAdapter(adapter);
-                mAdvertisementItems.setLayoutManager(new LinearLayoutManager(AdvertisementsActivity.this));
+                AdvertisementItemsAdapter adapter = (AdvertisementItemsAdapter) mAdvertisementItems.getAdapter();
+                adapter.setAdvertisements(mAds);
+                adapter.setAllAdvertisements(mAds);
                 // Opnum search barinn þegar gögnin eru kominn
                 mSearchView.setIconifiedByDefault(false);
                 // Setjum category ef það er búið að velja það
@@ -317,7 +321,6 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
 
     @Override
     public void onAdClick(int position) {
-        Log.d(TAG, token);
         if (!token.isEmpty()) {
             Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
             intent.putExtra("selected_ad", mAds.get(position));

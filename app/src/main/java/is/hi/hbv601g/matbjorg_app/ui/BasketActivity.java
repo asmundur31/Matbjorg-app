@@ -64,6 +64,7 @@ public class BasketActivity extends AppCompatActivity {
                 Toast.makeText(BasketActivity.this, error, Toast.LENGTH_SHORT).show();
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(Order order) {
                 String title = "";
@@ -107,6 +108,7 @@ public class BasketActivity extends AppCompatActivity {
      * @param order Order-ið sem á að fara inn í recyclerView
      * @param token Tokenið sem að innskráður notandi er með
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void buildRecyclerView(Order order, String token) {
         mItemsInBasket = (RecyclerView) findViewById(R.id.items_in_basket);
         BasketItemAdapter adapter = new BasketItemAdapter(mItems, BasketActivity.this);
