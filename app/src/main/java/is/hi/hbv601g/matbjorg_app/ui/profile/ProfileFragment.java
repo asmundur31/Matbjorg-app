@@ -54,11 +54,13 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
     private static final int REQUEST_CODE_ADD_ADVERTISEMENT = 0;
     private static final int REQUEST_CODE_CHANGE_ADVERTISEMENT = 1;
     private ArrayList<Advertisement> mSellerAds = new ArrayList<>();
+    private NetworkController networkController;
     private String token;
+    private long loggedin_user_id;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        NetworkController networkController = new NetworkController(getContext());
+        networkController = new NetworkController(getContext());
         mText = root.findViewById(R.id.text_profile);
         mListView = root.findViewById(R.id.listView_profile_orders);
         mTextPantanir = root.findViewById(R.id.text_previous_orders);
@@ -71,7 +73,7 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
         mSellerAdvertisements.setLayoutManager(new LinearLayoutManager(ProfileFragment.super.getContext()));
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
-        long loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
+        loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
         String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
         token = sharedPref.getString("token", "");
         Log.i(TAG, "Tjékkum hvort eitthver sé loggaður inn");
@@ -111,19 +113,7 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
                         startActivityForResult(intent, REQUEST_CODE_ADD_ADVERTISEMENT);
                     }
                 });
-                networkController.getSellersAds(new NetworkCallback<List<Advertisement>>() {
-                    @Override
-                    public void onError(String error) {
-                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onResponse(List<Advertisement> response) {
-                        mSellerAds = (ArrayList<Advertisement>) response;
-                        SellerAdsAdapter adapter = (SellerAdsAdapter) mSellerAdvertisements.getAdapter();
-                        adapter.setAdvertisements(mSellerAds);
-                    }
-                }, loggedin_user_id);
+                getSellerAds();
             }
 
         } else {
@@ -142,5 +132,27 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
             intent.putExtra("token", token);
             startActivityForResult(intent, REQUEST_CODE_CHANGE_ADVERTISEMENT);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSellerAds();
+    }
+
+    private void getSellerAds() {
+        networkController.getSellersAds(new NetworkCallback<List<Advertisement>>() {
+            @Override
+            public void onError(String error) {
+                Toast.makeText(ProfileFragment.super.getContext(), error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(List<Advertisement> response) {
+                mSellerAds = (ArrayList<Advertisement>) response;
+                SellerAdsAdapter adapter = (SellerAdsAdapter) mSellerAdvertisements.getAdapter();
+                adapter.setAdvertisements(mSellerAds);
+            }
+        }, loggedin_user_id);
     }
 }

@@ -10,7 +10,7 @@ public enum Tag {
     DRYKKJARVARA,
     VEITINGASTAÐUR,
     SÆLGÆTI,
-    HEILSUosakrVARA,
+    HEILSUVARA,
     KJÖT,
     BAUNIR,
     VEGAN,

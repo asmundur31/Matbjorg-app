@@ -93,7 +93,7 @@ public class SellerAdsAdapter extends RecyclerView.Adapter<SellerAdsAdapter.View
             description = itemView.findViewById(R.id.seller_ad_description);
             originalAmount = itemView.findViewById(R.id.seller_ad_original_amount);
             currentAmount = itemView.findViewById(R.id.seller_ad_current_amount);
-            price = itemView.findViewById(R.id.seller_ad_expire_date);
+            price = itemView.findViewById(R.id.seller_ad_price);
             expireDate = itemView.findViewById(R.id.seller_ad_expire_date);
             editButton = itemView.findViewById(R.id.seller_ad_edit_button);
             this.onAdChangeListener = onAdChangeListener;

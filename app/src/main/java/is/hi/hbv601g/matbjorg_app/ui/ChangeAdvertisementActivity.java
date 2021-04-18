@@ -61,6 +61,7 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
     private int selectedLocation = -1;
     private Button mChangeAdvertisementConfirmButton;
     private NetworkController networkController;
+    private String token;
 
     private Advertisement advertisement;
 
@@ -77,7 +78,7 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
 
         networkController  = new NetworkController(ChangeAdvertisementActivity.this);
         SharedPreferences sharedPref = this.getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
-        long loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
+        token = sharedPref.getString("token", "");
 
         mChangeAdvertisementHeiti = (EditText) findViewById(R.id.change_advertisement_heiti);
         mChangeAdvertisementLysing = (EditText) findViewById(R.id.change_advertisement_lysing);
@@ -134,7 +135,7 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
                             Toast.makeText(ChangeAdvertisementActivity.this, "Það tókst að uppfæra auglýsingu", Toast.LENGTH_LONG).show();
                             finish();
                         }
-                    }, advertisement.getId(), loggedin_user_id, mChangeAdvertisementHeiti.getText().toString(), mChangeAdvertisementLysing.getText().toString(),
+                    }, advertisement.getId(), token, mChangeAdvertisementHeiti.getText().toString(), mChangeAdvertisementLysing.getText().toString(),
                     Double.parseDouble(mChangeAdvertisementMagn.getText().toString()),
                     Double.parseDouble(mChangeAdvertisementVerd.getText().toString()),
                     LocalDateTime.parse(mChangeAdvertisementGildistimi.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")),
@@ -298,7 +299,8 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
                     selectedLocation = i;
                 }
             }
-            mChangeAdvertisementGildistimi.setText(advertisement.getExpireDate().toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            mChangeAdvertisementGildistimi.setText(advertisement.getExpireDate().format(formatter));
         }
     }
 

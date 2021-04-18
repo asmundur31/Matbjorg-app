@@ -73,6 +73,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     private int selectedLocation = -1;
     private Button mButtonConfirm;
     private NetworkController networkController;
+    private String token;
 
 
     public static Intent newIntent(Context packageContext) {
@@ -86,7 +87,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_advertisement);
         networkController  = new NetworkController(AddAdvertisementActivity.this);
         SharedPreferences sharedPref = this.getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
-        long loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
+        token = sharedPref.getString("token", "");
 
         mEditTextName = (EditText) findViewById(R.id.textinput_heiti);
         mEditTextDesc = (EditText) findViewById(R.id.textinput_lysing);
@@ -145,7 +146,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                           Toast.makeText(AddAdvertisementActivity.this, "Það tókst að setja inn auglýsingu", Toast.LENGTH_LONG).show();
                           finish();
                       }
-                  }, loggedin_user_id, mEditTextName.getText().toString(), mEditTextDesc.getText().toString(),
+                  }, token, mEditTextName.getText().toString(), mEditTextDesc.getText().toString(),
                           Double.parseDouble(mEditTextAmount.getText().toString()),
                           Double.parseDouble(mEditTextPrice.getText().toString()),
                           LocalDateTime.parse(mTextViewExpireDate.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")),
