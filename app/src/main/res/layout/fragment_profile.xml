@@ -48,4 +48,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/text_profile"
         app:layout_constraintTop_toBottomOf="@+id/text_profile"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recycler_view_seller_ads"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_setja_inn_auglysingu"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
