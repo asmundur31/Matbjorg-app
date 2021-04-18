@@ -322,7 +322,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
     @Override
     public void onAdClick(int position) {
         if (!token.isEmpty()) {
-            Intent intent = ChangeAdvertisementActivity.newIntent(AdvertisementsActivity.this);
+            Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
             AdvertisementItemsAdapter adapter = (AdvertisementItemsAdapter) mAdvertisementItems.getAdapter();
             intent.putExtra("selected_ad", adapter.getAd(position));
             intent.putExtra("token", token);
