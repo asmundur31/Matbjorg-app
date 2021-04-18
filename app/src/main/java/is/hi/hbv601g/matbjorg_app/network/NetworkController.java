@@ -418,6 +418,47 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    public void changeAdvertisement(NetworkCallback<Advertisement> networkCallback, Long advertismentId, Long sellerId, String name,
+                                 String description, double originalAmount, double price, LocalDateTime expireDate, List<String> tags, Location location) {
+        String url = URL_REST + "advertisements/" + String.format("change/%s?sellerId=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s&locationId=%s", advertismentId.toString(), sellerId.toString(), name, description, ""+originalAmount, ""+price, expireDate.toString(), location.getId());
+        JSONArray t = new JSONArray();
+        for(int i=0; i<tags.size(); i++) {
+            t.put(tags.get(i));
+        }
+        JSONObject postData = new JSONObject();
+        try {
+            postData.put("tags", t);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, postData, new Response.Listener<JSONObject>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new JsonDeserializer<LocalDateTime>() {
+                    @Override
+                    public LocalDateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                            throws JsonParseException {
+                        LocalDateTime lt = LocalDateTime.parse(json.getAsString());
+                        return lt;
+                    }
+                }).create();
+                String json = response.toString();
+                Type collectionType = new TypeToken<Advertisement>(){}.getType();
+                Advertisement ad = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(ad);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að setja inn auglýsingu");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
     public void getLocations(NetworkCallback<List<Location>> networkCallback) {
         String url = URL_REST + "locations";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
