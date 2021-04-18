@@ -63,6 +63,8 @@ public class AdvertisementActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: " + advertisement.toString());
             // Hér er aðgengi að Location, Tags og búið er að laga að expireDate skili null
             // TODO: Laga útlit og birta kannski location og tags líka
+            Log.d(TAG, advertisement.getTags().toString());
+            Log.d(TAG, advertisement.getLocation().getName());
 
             mName.setText(advertisement.getName());
             mPrice.setText("Verð: " + advertisement.getPrice());

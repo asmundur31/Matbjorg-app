@@ -36,11 +36,14 @@ import is.hi.hbv601g.matbjorg_app.models.Seller;
 import is.hi.hbv601g.matbjorg_app.network.NetworkCallback;
 import is.hi.hbv601g.matbjorg_app.network.NetworkController;
 import is.hi.hbv601g.matbjorg_app.ui.AddAdvertisementActivity;
+import is.hi.hbv601g.matbjorg_app.ui.AdvertisementActivity;
 import is.hi.hbv601g.matbjorg_app.ui.AdvertisementItemsAdapter;
+import is.hi.hbv601g.matbjorg_app.ui.AdvertisementsActivity;
+import is.hi.hbv601g.matbjorg_app.ui.ChangeAdvertisementActivity;
 import is.hi.hbv601g.matbjorg_app.ui.LoginActivity;
 import is.hi.hbv601g.matbjorg_app.ui.SellerAdsAdapter;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdChangeListener {
     private static final String TAG = "ProfileFragment";
     private TextView mText;
     private ListView mListView;
@@ -49,11 +52,15 @@ public class ProfileFragment extends Fragment {
     private RecyclerView mSellerAdvertisements;
     private LinearLayout mSellerAdvertisement;
     private static final int REQUEST_CODE_ADD_ADVERTISEMENT = 0;
+    private static final int REQUEST_CODE_CHANGE_ADVERTISEMENT = 1;
     private ArrayList<Advertisement> mSellerAds = new ArrayList<>();
+    private NetworkController networkController;
+    private String token;
+    private long loggedin_user_id;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-        NetworkController networkController = new NetworkController(getContext());
+        networkController = new NetworkController(getContext());
         mText = root.findViewById(R.id.text_profile);
         mListView = root.findViewById(R.id.listView_profile_orders);
         mTextPantanir = root.findViewById(R.id.text_previous_orders);
@@ -61,13 +68,14 @@ public class ProfileFragment extends Fragment {
         mSellerAdvertisements = root.findViewById(R.id.recycler_view_seller_ads);
         mSellerAdvertisement = root.findViewById(R.id.layout_advertisement_seller);
 
-        SellerAdsAdapter adapter = new SellerAdsAdapter(mSellerAds, ProfileFragment.super.getContext());
+        SellerAdsAdapter adapter = new SellerAdsAdapter(mSellerAds, ProfileFragment.super.getContext(), ProfileFragment.this);
         mSellerAdvertisements.setAdapter(adapter);
         mSellerAdvertisements.setLayoutManager(new LinearLayoutManager(ProfileFragment.super.getContext()));
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
-        long loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
+        loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
         String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
+        token = sharedPref.getString("token", "");
         Log.i(TAG, "Tjékkum hvort eitthver sé loggaður inn");
         if(loggedin_user_id != -1) {
             mText.setText("Notandi sem er loggaður inn hefur id = "+ loggedin_user_id + "\n og er " + loggedin_user_type);
@@ -105,19 +113,7 @@ public class ProfileFragment extends Fragment {
                         startActivityForResult(intent, REQUEST_CODE_ADD_ADVERTISEMENT);
                     }
                 });
-                networkController.getSellersAds(new NetworkCallback<List<Advertisement>>() {
-                    @Override
-                    public void onError(String error) {
-                        Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onResponse(List<Advertisement> response) {
-                        mSellerAds = (ArrayList<Advertisement>) response;
-                        SellerAdsAdapter adapter = (SellerAdsAdapter) mSellerAdvertisements.getAdapter();
-                        adapter.setAdvertisements(mSellerAds);
-                    }
-                }, loggedin_user_id);
+                getSellerAds();
             }
 
         } else {
@@ -125,5 +121,38 @@ public class ProfileFragment extends Fragment {
             mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
         }
         return root;
+    }
+
+    @Override
+    public void onAdChangeClick(int position) {
+        if (!token.isEmpty()) {
+            Intent intent = ChangeAdvertisementActivity.newIntent(ProfileFragment.super.getContext());
+            SellerAdsAdapter adapter = (SellerAdsAdapter) mSellerAdvertisements.getAdapter();
+            intent.putExtra("selected_ad", adapter.getAd(position));
+            intent.putExtra("token", token);
+            startActivityForResult(intent, REQUEST_CODE_CHANGE_ADVERTISEMENT);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getSellerAds();
+    }
+
+    private void getSellerAds() {
+        networkController.getSellersAds(new NetworkCallback<List<Advertisement>>() {
+            @Override
+            public void onError(String error) {
+                Toast.makeText(ProfileFragment.super.getContext(), error, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(List<Advertisement> response) {
+                mSellerAds = (ArrayList<Advertisement>) response;
+                SellerAdsAdapter adapter = (SellerAdsAdapter) mSellerAdvertisements.getAdapter();
+                adapter.setAdvertisements(mSellerAds);
+            }
+        }, loggedin_user_id);
     }
 }

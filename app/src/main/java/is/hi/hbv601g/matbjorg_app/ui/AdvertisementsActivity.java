@@ -323,7 +323,8 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
     public void onAdClick(int position) {
         if (!token.isEmpty()) {
             Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
-            intent.putExtra("selected_ad", mAds.get(position));
+            AdvertisementItemsAdapter adapter = (AdvertisementItemsAdapter) mAdvertisementItems.getAdapter();
+            intent.putExtra("selected_ad", adapter.getAd(position));
             intent.putExtra("token", token);
             startActivityForResult(intent, REQUEST_CODE_AD);
         }

@@ -69,6 +69,10 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
         advertisementArrayList.addAll(advertisements);
     }
 
+    public Advertisement getAd(int position) {
+        return mAdvertisements.get(position);
+    }
+
     /**
      * Fall sem filterar auglýsingar eftir streng, vöruflokk og söluaðila
      * @param charText strengur sem leitað er eftir
