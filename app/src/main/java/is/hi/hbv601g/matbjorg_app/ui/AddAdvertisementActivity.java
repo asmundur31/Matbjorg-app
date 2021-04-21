@@ -112,7 +112,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         AddAdvertisementActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        android.R.style.Theme_Holo_Light_Dialog,
                         mOnDateSetListener,
                         year, month, day);
                 dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
