@@ -56,6 +56,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
     private static final int REQUEST_CODE_AD = 0;
     private List<Advertisement> mAds;
     private String token;
+    private String loggedin_user_type;
     private NetworkController networkController;
 
     public static Intent newIntent(Context packageContext) {
@@ -81,6 +82,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
         // Sækjum token hjá innskráðum notanda
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
         token = sharedPref.getString("token", "");
+        loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
 
         networkController = new NetworkController(this);
 
@@ -318,7 +320,7 @@ public class AdvertisementsActivity extends AppCompatActivity implements Adverti
     @Override
     public void onAdClick(int position) {
         Log.d(TAG, token);
-        if (!token.isEmpty()) {
+        if (!token.isEmpty() && loggedin_user_type.equals("buyer")) {
             Intent intent = AdvertisementActivity.newIntent(AdvertisementsActivity.this);
             intent.putExtra("selected_ad", mAds.get(position));
             intent.putExtra("token", token);

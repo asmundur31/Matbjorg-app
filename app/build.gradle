@@ -14,6 +14,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -49,4 +50,6 @@ dependencies {
 
     // Places library
     implementation 'com.google.android.libraries.places:places:2.0.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
