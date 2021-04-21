@@ -3,7 +3,10 @@ package is.hi.hbv601g.matbjorg_app.network;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import android.graphics.Bitmap;
 import android.os.Build;
+import android.os.Bundle;
+import java.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -27,10 +30,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -401,9 +406,9 @@ public class NetworkController {
         });
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void addAdvertisement(NetworkCallback<Advertisement> networkCallback, String token, String name,
-                                 String description, double originalAmount, double price, LocalDateTime expireDate, List<String> tags, Location location) {
+                                 String description, double originalAmount, double price, LocalDateTime expireDate, List<String> tags, Location location, Bundle picture) {
         String url = URL_REST + "advertisements/" + String.format("add?token=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s&locationId=%s", token, name, description, ""+originalAmount, ""+price, expireDate.toString(), location.getId());
         JSONArray t = new JSONArray();
         for(int i=0; i<tags.size(); i++) {
@@ -412,6 +417,18 @@ public class NetworkController {
         JSONObject postData = new JSONObject();
         try {
             postData.put("tags", t);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Bitmap bm = (Bitmap) picture.get("data");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        String encodedImage = new String(Base64.getEncoder().encode(b));
+        JSONArray pic = new JSONArray();
+        pic.put(encodedImage);
+        try {
+            postData.put("pic", pic);
         } catch (JSONException e) {
             e.printStackTrace();
         }

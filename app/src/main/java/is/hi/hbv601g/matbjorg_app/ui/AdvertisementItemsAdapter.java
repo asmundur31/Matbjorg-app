@@ -55,26 +55,12 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String url = URL_REST + "advertisements/image/" + mAdvertisements.get(position).getPictureName();
-        //Drawable image = LoadImageFromWebOperations(url);
-        //holder.itemImage.setImageDrawable(image);
-        //holder.itemImage.setImageBitmap(BitmapFactory.decodeFile(mAdvertisements.get(position).getPictureName()));
         Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(holder.itemImage);
         holder.itemName.setText(mAdvertisements.get(position).getName());
         holder.itemSeller.setText("Söluaðili: " + mAdvertisements.get(position).getSellerName());
-        // holder.itemDescription.setText("Lýsing: " + mAdvertisements.get(position).getDescription());
         holder.itemCurrentAmount.setText("Magn: " + mAdvertisements.get(position).getCurrentAmount());
         holder.itemPrice.setText("Verð: " + mAdvertisements.get(position).getPrice());
         holder.itemExpireDate.setText("Gildir til: " + mAdvertisements.get(position).getExpireDate());
-    }
-
-    public static Drawable LoadImageFromWebOperations(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
     }
 
     @Override

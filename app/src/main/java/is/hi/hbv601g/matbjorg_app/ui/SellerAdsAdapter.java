@@ -20,12 +20,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.models.Advertisement;
 import is.hi.hbv601g.matbjorg_app.ui.profile.ProfileFragment;
+
+import static is.hi.hbv601g.matbjorg_app.network.NetworkController.URL_REST;
 
 public class SellerAdsAdapter extends RecyclerView.Adapter<SellerAdsAdapter.ViewHolder> {
     private static final String TAG = "SellerAdsAdapter";
@@ -53,6 +57,8 @@ public class SellerAdsAdapter extends RecyclerView.Adapter<SellerAdsAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: called");
+        String url = URL_REST + "advertisements/image/" + mSellerAds.get(position).getPictureName();
+        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(holder.image);
         holder.name.setText("Heiti : " + mSellerAds.get(position).getName());
         holder.description.setText("Lýsing : " + mSellerAds.get(position).getDescription());
         holder.originalAmount.setText("Upphaflegt magn : " + mSellerAds.get(position).getOriginalAmount());

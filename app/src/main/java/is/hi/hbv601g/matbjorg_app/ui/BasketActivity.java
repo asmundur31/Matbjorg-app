@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class BasketActivity extends AppCompatActivity {
     private TextView mTotalPrice;
     private RecyclerView mItemsInBasket;
     private Button mConfirmBasket;
+    public static final int REQUEST_CODE_BASKET = 0;
     private List<OrderItem> mItems = new ArrayList<OrderItem>();
 
     private NetworkController networkController;
@@ -94,9 +97,11 @@ public class BasketActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Order order) {
                         Toast.makeText(BasketActivity.this, "Karfa staðfest", Toast.LENGTH_SHORT).show();
-                        finish();
-                        // Hvert viljum við fara? Heimasvæðið?
-                        // Kannski kvittun?
+                        Intent intent = ReceiptActivity.newIntent(BasketActivity.this);
+                        // Sendum receipt activity order sem json
+                        intent.putExtra("order", (new Gson()).toJson(order));
+                        intent.putExtra("token", token);
+                        startActivityForResult(intent, REQUEST_CODE_BASKET);
                     }
                 }, token);
             }
