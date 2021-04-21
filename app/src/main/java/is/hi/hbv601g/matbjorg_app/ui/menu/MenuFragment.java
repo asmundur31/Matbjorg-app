@@ -123,12 +123,13 @@ public class MenuFragment extends Fragment {
     private void checkLoggedIn() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
         String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
+        Log.d(TAG, loggedin_user_type);
         if (loggedin_user_type.equals("")) {
             mLoginButton.setVisibility(View.VISIBLE);
             mSignupButton.setVisibility(View.VISIBLE);
             mLogoutButton.setVisibility(View.GONE);
             mBasketButton.setVisibility(View.GONE);
-        } else if (loggedin_user_type.equals("Buyer")){
+        } else if (loggedin_user_type.equals("buyer")){
             mLoginButton.setVisibility(View.GONE);
             mSignupButton.setVisibility(View.GONE);
             mLogoutButton.setVisibility(View.VISIBLE);

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ChangeAdvertisementActivity">
+
+    <TextView
+        android:id="@+id/change_advertisement_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:text="Breyttu þeim atriðum sem þig langar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <EditText
+        android:id="@+id/change_advertisement_heiti"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="16dp"
+        android:hint="Heiti"
+        android:inputType="text"
+        android:selectAllOnFocus="true"
+        app:layout_constraintTop_toBottomOf="@+id/change_advertisement_text"/>
+
+    <EditText
+        android:id="@+id/change_advertisement_lysing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="16dp"
+        android:hint="Lýsing"
+        android:inputType="textMultiLine"
+        android:selectAllOnFocus="true"
+        app:layout_constraintTop_toBottomOf="@+id/change_advertisement_heiti"/>
+    <EditText
+        android:id="@+id/change_advertisement_magn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="16dp"
+        android:hint="Magn"
+        android:inputType="numberDecimal"
+        android:selectAllOnFocus="true"
+        app:layout_constraintTop_toBottomOf="@+id/change_advertisement_lysing"/>
+
+    <EditText
+        android:id="@+id/change_advertisement_verd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="16dp"
+        android:hint="Verð"
+        android:inputType="numberDecimal"
+        android:selectAllOnFocus="true"
+        app:layout_constraintTop_toBottomOf="@+id/change_advertisement_magn"/>
+
+    <TextView
+        android:id="@+id/change_advertisement_gildistimi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="16dp"
+        android:text="Velja gildistíma"
+        android:selectAllOnFocus="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/change_advertisement_verd"
+        app:layout_constraintTop_toBottomOf="@+id/change_advertisement_verd" />
+
+    <TextView
+        android:id="@+id/change_advertisement_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/categories"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:drawableRight="@drawable/arrow_drop_down"
+        app:layout_constraintTop_toTopOf="@+id/change_advertisement_gildistimi" />
+
+    <TextView
+        android:id="@+id/change_advertisement_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/location"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:drawableRight="@drawable/arrow_drop_down"
+        app:layout_constraintTop_toTopOf="@+id/change_advertisement_tags" />
+
+    <Button
+        android:id="@+id/change_advertisement_confirm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Staðfesta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/change_advertisement_location"
+        app:layout_constraintTop_toTopOf="@+id/change_advertisement_location"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

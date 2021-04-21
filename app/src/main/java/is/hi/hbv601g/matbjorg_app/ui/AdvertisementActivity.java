@@ -71,6 +71,8 @@ public class AdvertisementActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: " + advertisement.toString());
             // Hér er aðgengi að Location, Tags og búið er að laga að expireDate skili null
             // TODO: Laga útlit og birta kannski location og tags líka
+            Log.d(TAG, advertisement.getTags().toString());
+            Log.d(TAG, advertisement.getLocation().getName());
 
             String url = URL_REST + "advertisements/image/" + advertisement.getPictureName();
             Picasso.get().load(url).fit().centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(mImage);

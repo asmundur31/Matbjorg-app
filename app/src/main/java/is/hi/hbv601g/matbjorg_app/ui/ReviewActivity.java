@@ -118,7 +118,7 @@ public class ReviewActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (selectedSeller > -1) {
                             mSellerText.setText(sellersString[selectedSeller]);
-                            if (loggedin_user_type.equals("Buyer")) {
+                            if (loggedin_user_type.equals("buyer")) {
                                 mNewReviewButton.setVisibility(View.VISIBLE);
                             }
                             // Sækja öll review eftir ákveðnum seller
