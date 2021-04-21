@@ -100,6 +100,31 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    public void getImage(NetworkCallback<List<Advertisement>> networkCallback, String imageName, String imageType) {
+        String url = URL_REST + "advertisements/image/" + imageName + "." + imageType;
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(JSONArray response) {
+                Log.d(TAG, response.toString());
+                Gson gson = new Gson();
+                String json = response.toString();
+                Type collectionType = new TypeToken<List<Advertisement>>(){}.getType();
+                List<Advertisement> ads = gson.fromJson(json, collectionType);
+                networkCallback.onResponse(ads);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.toString());
+                networkCallback.onError("Gekk ekki að sækja mynd");
+            }
+        });
+        NetworkSingleton.getInstance(context).addToRequestQueue(request);
+    }
+
+
+
     public void getBuyers(NetworkCallback<List<Buyer>> networkCallback) {
         String url = URL_REST + "buyers";
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {

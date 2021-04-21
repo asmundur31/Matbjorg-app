@@ -62,6 +62,7 @@ public class Advertisement implements Parcelable {
         tags = (Set<Tag>) in.readSerializable();
         pictureName = in.readString();
         location = in.readParcelable(Location.class.getClassLoader());
+        sellerName = in.readString();
     }
 
     public static final Creator<Advertisement> CREATOR = new Creator<Advertisement>() {
@@ -201,5 +202,6 @@ public class Advertisement implements Parcelable {
         dest.writeSerializable((Serializable) tags);
         dest.writeString(pictureName);
         dest.writeParcelable(location, flags);
+        dest.writeString(sellerName);
     }
 }
