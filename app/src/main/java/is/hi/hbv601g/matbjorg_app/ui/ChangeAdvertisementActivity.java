@@ -5,33 +5,31 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.models.Advertisement;
@@ -40,79 +38,61 @@ import is.hi.hbv601g.matbjorg_app.models.Tag;
 import is.hi.hbv601g.matbjorg_app.network.NetworkCallback;
 import is.hi.hbv601g.matbjorg_app.network.NetworkController;
 
-@RequiresApi(api = Build.VERSION_CODES.M)
-public class AddAdvertisementActivity extends AppCompatActivity {
+public class ChangeAdvertisementActivity extends AppCompatActivity {
+    private static final String TAG = "ChangeAdvertisementActivity";
 
-    private static final String TAG = "AddAdvertisementActivity";
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private EditText mChangeAdvertisementHeiti;
+    private EditText mChangeAdvertisementLysing;
+    private EditText mChangeAdvertisementMagn;
+    private EditText mChangeAdvertisementVerd;
 
-
-    private EditText mEditTextName;
-    private EditText mEditTextDesc;
-    private EditText mEditTextAmount;
-    private EditText mEditTextPrice;
-
-    private TextView mTextViewExpireDate;
+    private TextView mChangeAdvertisementGildistimi;
     private DatePickerDialog.OnDateSetListener mOnDateSetListener;
- 
-    private TextView mTextViewCategories;
+
+    private TextView mChangeAdvertisementTags;
     private boolean[] selectedCategories;
     private ArrayList<Integer> categoryIndices = new ArrayList<>();
     private String[] categoryStrings;
     private List<String> chosenTags = new ArrayList<>();
-    private TextView mTextViewLocation;
+    private TextView mChangeAdvertisementLocation;
     private String[] locationStrings;
     private List<Location> locationsArray = new ArrayList<>();
     private Location chosenLocation;
     private int selectedLocation = -1;
-    private Button mButtonConfirm;
+    private Button mChangeAdvertisementConfirmButton;
     private NetworkController networkController;
-    private Button mCamera;
-    private ImageView mImageCapture;
-    private Bundle imageUpload;
     private String token;
 
+    private Advertisement advertisement;
 
     public static Intent newIntent(Context packageContext) {
-        Intent intent = new Intent(packageContext, AddAdvertisementActivity.class);
+        Intent intent = new Intent(packageContext, ChangeAdvertisementActivity.class);
         return intent;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_advertisement);
-        networkController  = new NetworkController(AddAdvertisementActivity.this);
+        setContentView(R.layout.activity_change_advertisement);
+
+        networkController  = new NetworkController(ChangeAdvertisementActivity.this);
         SharedPreferences sharedPref = this.getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
         token = sharedPref.getString("token", "");
 
-        mEditTextName = (EditText) findViewById(R.id.textinput_heiti);
-        mEditTextDesc = (EditText) findViewById(R.id.textinput_lysing);
-        mEditTextAmount = (EditText) findViewById(R.id.textinput_magn);
-        mEditTextPrice = (EditText) findViewById(R.id.textinput_verd);
-        mTextViewCategories = (TextView) findViewById(R.id.select_tags);
-        mTextViewLocation = (TextView) findViewById(R.id.select_location);
-        mButtonConfirm = (Button) findViewById(R.id.button_staðfesta_auglýsingu);
-        mTextViewExpireDate = (TextView) findViewById(R.id.text_velja_gildistima);
-        mCamera = (Button) findViewById(R.id.camera);
-        mImageCapture = (ImageView) findViewById(R.id.captureImage);
-
+        mChangeAdvertisementHeiti = (EditText) findViewById(R.id.change_advertisement_heiti);
+        mChangeAdvertisementLysing = (EditText) findViewById(R.id.change_advertisement_lysing);
+        mChangeAdvertisementMagn = (EditText) findViewById(R.id.change_advertisement_magn);
+        mChangeAdvertisementVerd = (EditText) findViewById(R.id.change_advertisement_verd);
+        mChangeAdvertisementTags = (TextView) findViewById(R.id.change_advertisement_tags);
+        mChangeAdvertisementLocation = (TextView) findViewById(R.id.change_advertisement_location);
+        mChangeAdvertisementConfirmButton = (Button) findViewById(R.id.change_advertisement_confirm_button);
+        mChangeAdvertisementGildistimi = (TextView) findViewById(R.id.change_advertisement_gildistimi);
 
         setUpFilterCategory();
         setUpFilterLocation();
-        mCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    // display error state to the user
-                }
-            }
-        });
 
-        mTextViewExpireDate.setOnClickListener(new View.OnClickListener() {
+        mChangeAdvertisementGildistimi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
@@ -121,8 +101,8 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
-                        AddAdvertisementActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog,
+                        ChangeAdvertisementActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                         mOnDateSetListener,
                         year, month, day);
                 dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
@@ -135,33 +115,32 @@ public class AddAdvertisementActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 month = month+1;
                 String date = year + "-" + String.format("%02d", month) + "-" + String.format("%02d", dayOfMonth);
-                mTextViewExpireDate.setText(date);
+                mChangeAdvertisementGildistimi.setText(date);
             }
-        };      
+        };
 
-        mButtonConfirm.setOnClickListener(new View.OnClickListener() {
+        mChangeAdvertisementConfirmButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 if (checkInputs()) {
-  
-                  networkController.addAdvertisement(new NetworkCallback<Advertisement>() {
-                      @Override
-                      public void onError(String error) {
-                          Toast.makeText(AddAdvertisementActivity.this, error, Toast.LENGTH_SHORT).show();
-                      }
+                    networkController.changeAdvertisement(new NetworkCallback<Advertisement>() {
+                        @Override
+                        public void onError(String error) {
+                            Toast.makeText(ChangeAdvertisementActivity.this, error, Toast.LENGTH_SHORT).show();
+                        }
 
-                      @Override
-                      public void onResponse(Advertisement response) {
-                          Toast.makeText(AddAdvertisementActivity.this, "Það tókst að setja inn auglýsingu", Toast.LENGTH_LONG).show();
-                          finish();
-                      }
-                  }, token, mEditTextName.getText().toString(), mEditTextDesc.getText().toString(),
-                          Double.parseDouble(mEditTextAmount.getText().toString()),
-                          Double.parseDouble(mEditTextPrice.getText().toString()),
-                          LocalDateTime.parse(mTextViewExpireDate.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")),
-                          chosenTags,
-                          chosenLocation, imageUpload);
+                        @Override
+                        public void onResponse(Advertisement response) {
+                            Toast.makeText(ChangeAdvertisementActivity.this, "Það tókst að uppfæra auglýsingu", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+                    }, advertisement.getId(), token, mChangeAdvertisementHeiti.getText().toString(), mChangeAdvertisementLysing.getText().toString(),
+                    Double.parseDouble(mChangeAdvertisementMagn.getText().toString()),
+                    Double.parseDouble(mChangeAdvertisementVerd.getText().toString()),
+                    LocalDateTime.parse(mChangeAdvertisementGildistimi.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")),
+                    chosenTags,
+                    chosenLocation);
                 }
             }
         });
@@ -180,9 +159,10 @@ public class AddAdvertisementActivity extends AppCompatActivity {
         networkController.getLocationsBySeller(new NetworkCallback<List<Location>>() {
             @Override
             public void onError(String error) {
-                Toast.makeText(AddAdvertisementActivity.this, error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ChangeAdvertisementActivity.this, error, Toast.LENGTH_SHORT).show();
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(List<Location> locations) {
                 locationStrings = new String[locations.size()];
@@ -193,15 +173,16 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                 Arrays.sort(locationStrings);
                 Collections.sort(locationsArray);
                 setUpLocationListener();
+                putInData();
             }
         }, loggedin_user_id);
     }
 
     private void setUpCategoryListener() {
-        mTextViewCategories.setOnClickListener(new View.OnClickListener() {
+        mChangeAdvertisementTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddAdvertisementActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChangeAdvertisementActivity.this);
                 builder.setTitle("Veldu flokka");
                 builder.setMultiChoiceItems(categoryStrings, selectedCategories, new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
@@ -224,7 +205,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                             chosenTags.add(categoryStrings[categoryIndices.get(i)]);
                         }
                         if (chosenTags.size() > 0) {
-                            mTextViewCategories.setError(null);
+                            mChangeAdvertisementTags.setError(null);
                         }
                     }
                 });
@@ -252,10 +233,10 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     }
 
     private void setUpLocationListener() {
-        mTextViewLocation.setOnClickListener(new View.OnClickListener() {
+        mChangeAdvertisementLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(AddAdvertisementActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChangeAdvertisementActivity.this);
                 builder.setTitle("Veldu staðsetningu");
                 builder.setSingleChoiceItems(locationStrings, selectedLocation, new DialogInterface.OnClickListener() {
                     @Override
@@ -272,7 +253,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                         if (selectedLocation == -1) {
                             chosenLocation = null;
                         } else {
-                            mTextViewLocation.setError(null);
+                            mChangeAdvertisementLocation.setError(null);
                         }
                     }
                 });
@@ -292,46 +273,67 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    private void putInData() {
+        Intent intent = getIntent();
+        if(intent.hasExtra("selected_ad")) {
+            advertisement = intent.getParcelableExtra("selected_ad");
+            mChangeAdvertisementHeiti.setText(advertisement.getName());
+            mChangeAdvertisementLysing.setText(advertisement.getDescription());
+            mChangeAdvertisementMagn.setText(advertisement.getCurrentAmount()+"");
+            mChangeAdvertisementVerd.setText(advertisement.getPrice()+"");
+            Set<Tag> tags = advertisement.getTags();
+            for (Tag tag : tags) {
+                for (int j=0; j<categoryStrings.length; j++) {
+                    if (tag.name().equals(categoryStrings[j])) {
+                        selectedCategories[j] = true;
+                        categoryIndices.add(j);
+                        chosenTags.add(categoryStrings[j]);
+                        break;
+                    }
+                }
+            }
+            Location location = advertisement.getLocation();
+            chosenLocation = location;
+            for (int i=0; i<locationStrings.length; i++) {
+                if (location.getName().equals(locationStrings[i])) {
+                    selectedLocation = i;
+                }
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            mChangeAdvertisementGildistimi.setText(advertisement.getExpireDate().format(formatter));
+        }
+    }
+
     private boolean checkInputs() {
-        if(TextUtils.isEmpty(mEditTextName.getText())) {
-            mEditTextName.setError("Gefðu auglýsingunni heiti");
-            return false;
+        boolean submit = true;
+        if(TextUtils.isEmpty(mChangeAdvertisementHeiti.getText())) {
+            mChangeAdvertisementHeiti.setError("Gefðu auglýsingunni heiti");
+            submit = false;
         }
-        if(TextUtils.isEmpty(mEditTextDesc.getText())){
-            mEditTextDesc.setError("Bættu við lýsingu á vörunni");
-            return false;
+        if(TextUtils.isEmpty(mChangeAdvertisementLysing.getText())){
+            mChangeAdvertisementLysing.setError("Bættu við lýsingu á vörunni");
+            submit = false;
         }
-        if(TextUtils.isEmpty(mEditTextAmount.getText())){
-            mEditTextAmount.setError("Settu inn magn af vöru");
-            return false;
+        if(TextUtils.isEmpty(mChangeAdvertisementMagn.getText())){
+            mChangeAdvertisementMagn.setError("Settu inn magn af vöru");
+            submit = false;
         }
-        if(TextUtils.isEmpty(mEditTextPrice.getText())){
-            mEditTextPrice.setError("Gefðu vörunni verð");
-            return false;
+        if(TextUtils.isEmpty(mChangeAdvertisementVerd.getText())){
+            mChangeAdvertisementVerd.setError("Gefðu vörunni verð");
+            submit = false;
         }
-        if(mTextViewExpireDate.getText().toString().equals("Velja gildistíma")) {
-            mTextViewExpireDate.setError("Veldu gildistíma");
-            return false;
+        if(mChangeAdvertisementGildistimi.getText().toString().equals("Velja gildistíma")) {
+            mChangeAdvertisementGildistimi.setError("Veldu gildistíma");
+            submit = false;
         }
         if (categoryIndices.size() == 0) {
-            mTextViewCategories.setError("Veldu a.m.k. einn vöruflokk");
-            return false;
+            mChangeAdvertisementTags.setError("Veldu a.m.k. einn vöruflokk");
+            submit = false;
         }
         if (chosenLocation == null) {
-            mTextViewLocation.setError("Veldu staðsetningu");
-            return false;
+            mChangeAdvertisementLocation.setError("Veldu staðsetningu");
+            submit = false;
         }
-        return true;
+        return submit;
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            imageUpload = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) imageUpload.get("data");
-            mImageCapture.setImageBitmap(imageBitmap);
-        }
-    }
-
 }

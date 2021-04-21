@@ -1,16 +1,23 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +25,8 @@ import java.util.Locale;
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.models.Advertisement;
 import is.hi.hbv601g.matbjorg_app.models.Tag;
+
+import static is.hi.hbv601g.matbjorg_app.network.NetworkController.URL_REST;
 
 public class AdvertisementItemsAdapter extends RecyclerView.Adapter<AdvertisementItemsAdapter.ViewHolder> {
     private static final String TAG = "AdvertisementItemsAdapter";
@@ -45,12 +54,27 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String url = URL_REST + "advertisements/image/" + mAdvertisements.get(position).getPictureName();
+        //Drawable image = LoadImageFromWebOperations(url);
+        //holder.itemImage.setImageDrawable(image);
+        //holder.itemImage.setImageBitmap(BitmapFactory.decodeFile(mAdvertisements.get(position).getPictureName()));
+        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(holder.itemImage);
         holder.itemName.setText(mAdvertisements.get(position).getName());
-        // holder.itemSeller.setText("Söluaðili: " + mSellers.get(position));
-        holder.itemDescription.setText("Lýsing: " + mAdvertisements.get(position).getDescription());
+        holder.itemSeller.setText("Söluaðili: " + mAdvertisements.get(position).getSellerName());
+        // holder.itemDescription.setText("Lýsing: " + mAdvertisements.get(position).getDescription());
         holder.itemCurrentAmount.setText("Magn: " + mAdvertisements.get(position).getCurrentAmount());
         holder.itemPrice.setText("Verð: " + mAdvertisements.get(position).getPrice());
         holder.itemExpireDate.setText("Gildir til: " + mAdvertisements.get(position).getExpireDate());
+    }
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "src name");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -67,6 +91,10 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     public void setAllAdvertisements(List<Advertisement> advertisements) {
         advertisementArrayList.clear();
         advertisementArrayList.addAll(advertisements);
+    }
+
+    public Advertisement getAd(int position) {
+        return mAdvertisements.get(position);
     }
 
     /**
@@ -132,9 +160,10 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         // ATH mynd!
+        ImageView itemImage;
         TextView itemName;
-        // TextView itemSeller;
-        TextView itemDescription;
+        TextView itemSeller;
+        // TextView itemDescription;
         TextView itemCurrentAmount;
         TextView itemPrice;
         TextView itemExpireDate;
@@ -142,9 +171,10 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
 
         public ViewHolder(@NonNull View itemView, OnAdListener onAdListener) {
             super(itemView);
+            itemImage = itemView.findViewById(R.id.advertisement_item_image);
             itemName = itemView.findViewById(R.id.advertisement_item_name);
-            // itemSeller = itemView.findViewById(R.id.basket_item_seller);
-            itemDescription = itemView.findViewById(R.id.advertisement_item_description);
+            itemSeller = itemView.findViewById(R.id.advertisement_item_seller);
+            //itemDescription = itemView.findViewById(R.id.advertisement_item_description);
             itemCurrentAmount = itemView.findViewById(R.id.advertisement_item_current_amount);
             itemPrice = itemView.findViewById(R.id.advertisement_item_price);
             itemExpireDate = itemView.findViewById(R.id.advertisement_item_expire_date);
