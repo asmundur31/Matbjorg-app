@@ -75,10 +75,11 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
         SharedPreferences sharedPref = getActivity().getSharedPreferences("is.hi.hbv601g.matbjorg_app", Context.MODE_PRIVATE);
         loggedin_user_id = sharedPref.getLong("loggedin_user_id", -1);
         String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
+        String loggedin_user_email = sharedPref.getString("loggedin_user_email", "");
         token = sharedPref.getString("token", "");
         Log.i(TAG, "Tjékkum hvort eitthver sé loggaður inn");
         if(loggedin_user_id != -1) {
-            mText.setText("Notandi sem er loggaður inn hefur id = "+ loggedin_user_id + "\n og er " + loggedin_user_type);
+            mText.setText("Þú ert skráður inn sem " + loggedin_user_type + " með netfangið " + loggedin_user_email);
 
             if(loggedin_user_type.equals("buyer")) {
                 mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
@@ -117,7 +118,7 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
             }
 
         } else {
-            mText.setText("Enginn loggaður inn");
+            mText.setText("Enginn skráður inn");
             mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
         }
         return root;
@@ -139,6 +140,7 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
         super.onResume();
         getSellerAds();
     }
+
 
     private void getSellerAds() {
         networkController.getSellersAds(new NetworkCallback<List<Advertisement>>() {

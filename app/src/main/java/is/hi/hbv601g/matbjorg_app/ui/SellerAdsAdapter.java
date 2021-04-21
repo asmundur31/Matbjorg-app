@@ -1,7 +1,9 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Build;
 import android.util.Log;
@@ -46,6 +48,7 @@ public class SellerAdsAdapter extends RecyclerView.Adapter<SellerAdsAdapter.View
         return viewHolder;
     }
 
+    @SuppressLint("ResourceAsColor")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -56,6 +59,14 @@ public class SellerAdsAdapter extends RecyclerView.Adapter<SellerAdsAdapter.View
         holder.currentAmount.setText("Eftirstöðvar : " + mSellerAds.get(position).getCurrentAmount());
         holder.price.setText("Verð : " + mSellerAds.get(position).getPrice());
         holder.expireDate.setText("Síðasti söludagur : " + mSellerAds.get(position).getExpireDate().toString());
+        if(!mSellerAds.get(position).isActive()){
+            holder.editButton.setVisibility(View.GONE);
+            holder.itemView.setBackgroundResource(R.drawable.boarder_grey);
+        }
+        else {
+            holder.editButton.setVisibility(View.VISIBLE);
+            holder.itemView.setBackgroundResource(R.drawable.border);
+        }
     }
 
     @Override
