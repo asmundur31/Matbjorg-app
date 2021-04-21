@@ -4,43 +4,35 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.MediaDataSource;
 import android.os.Build;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
-import android.text.InputType;
+import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.ArraySet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import is.hi.hbv601g.matbjorg_app.MainActivity;
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.models.Advertisement;
 import is.hi.hbv601g.matbjorg_app.models.Location;
@@ -52,6 +44,8 @@ import is.hi.hbv601g.matbjorg_app.network.NetworkController;
 public class AddAdvertisementActivity extends AppCompatActivity {
 
     private static final String TAG = "AddAdvertisementActivity";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
 
     private EditText mEditTextName;
     private EditText mEditTextDesc;
@@ -73,6 +67,9 @@ public class AddAdvertisementActivity extends AppCompatActivity {
     private int selectedLocation = -1;
     private Button mButtonConfirm;
     private NetworkController networkController;
+    private Button mCamera;
+    private ImageView mImageCapture;
+    private Bundle imageUpload;
 
 
     public static Intent newIntent(Context packageContext) {
@@ -96,10 +93,23 @@ public class AddAdvertisementActivity extends AppCompatActivity {
         mTextViewLocation = (TextView) findViewById(R.id.select_location);
         mButtonConfirm = (Button) findViewById(R.id.button_staðfesta_auglýsingu);
         mTextViewExpireDate = (TextView) findViewById(R.id.text_velja_gildistima);
+        mCamera = (Button) findViewById(R.id.camera);
+        mImageCapture = (ImageView) findViewById(R.id.captureImage);
 
 
         setUpFilterCategory();
         setUpFilterLocation();
+        mCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    // display error state to the user
+                }
+            }
+        });
 
         mTextViewExpireDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +160,7 @@ public class AddAdvertisementActivity extends AppCompatActivity {
                           Double.parseDouble(mEditTextPrice.getText().toString()),
                           LocalDateTime.parse(mTextViewExpireDate.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")),
                           chosenTags,
-                          chosenLocation);
+                          chosenLocation, imageUpload);
                 }
             }
         });
@@ -311,6 +321,16 @@ public class AddAdvertisementActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            imageUpload = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) imageUpload.get("data");
+            mImageCapture.setImageBitmap(imageBitmap);
+        }
     }
 
 }
