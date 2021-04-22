@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -25,6 +27,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +43,10 @@ import is.hi.hbv601g.matbjorg_app.ui.AddAdvertisementActivity;
 import is.hi.hbv601g.matbjorg_app.ui.AdvertisementActivity;
 import is.hi.hbv601g.matbjorg_app.ui.AdvertisementItemsAdapter;
 import is.hi.hbv601g.matbjorg_app.ui.AdvertisementsActivity;
+import is.hi.hbv601g.matbjorg_app.ui.BasketActivity;
 import is.hi.hbv601g.matbjorg_app.ui.ChangeAdvertisementActivity;
 import is.hi.hbv601g.matbjorg_app.ui.LoginActivity;
+import is.hi.hbv601g.matbjorg_app.ui.ReceiptActivity;
 import is.hi.hbv601g.matbjorg_app.ui.SellerAdsAdapter;
 
 public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdChangeListener {
@@ -53,10 +59,14 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
     private LinearLayout mSellerAdvertisement;
     private static final int REQUEST_CODE_ADD_ADVERTISEMENT = 0;
     private static final int REQUEST_CODE_CHANGE_ADVERTISEMENT = 1;
+    private static final int REQUEST_CODE_RECEIPT = 2;
     private ArrayList<Advertisement> mSellerAds = new ArrayList<>();
+    private ArrayList<Order> orderList = new ArrayList<>();
+    List<String> orderDates = new ArrayList<>();
     private NetworkController networkController;
     private String token;
     private long loggedin_user_id;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -82,26 +92,14 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
             mText.setText("Þú ert skráður inn sem " + loggedin_user_type + " með netfangið " + loggedin_user_email);
 
             if(loggedin_user_type.equals("buyer")) {
+                mSellerAdvertisements.setVisibility(View.GONE);
                 mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
                 mTextPantanir.setText("Þínar pantanir:");
                 Toast.makeText(getActivity(), "Sæki pantanir notanda", Toast.LENGTH_SHORT).show();
-                List<Order> orders = new ArrayList<>();
-                ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, orders);
+                ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, orderDates);
                 mListView.setAdapter(arrayAdapter);
-                networkController.getBuyerOrders(new NetworkCallback<List<Order>>() {
-                                                     @Override
-                                                     public void onError(String error) {
-                                                         Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
-                                                     }
+                getBuyersOrders();
 
-                                                     @Override
-                                                     public void onResponse(List<Order> orders) {
-                                                         ArrayAdapter arrayAdapter = (ArrayAdapter) mListView.getAdapter();
-                                                         arrayAdapter.addAll(orders);
-                                                         arrayAdapter.notifyDataSetChanged();
-                                                     }
-                                                 }, loggedin_user_id
-                );
             }
 
             if(loggedin_user_type.equals("seller")){
@@ -121,6 +119,18 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
             mText.setText("Enginn skráður inn");
             mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
         }
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Order o = (Order) orderList.get(position);
+                Intent intent = ReceiptActivity.newIntent(ProfileFragment.super.getContext());
+                intent.putExtra("order", (new Gson()).toJson(o));
+                intent.putExtra("token", token);
+                startActivityForResult(intent, REQUEST_CODE_RECEIPT);
+            }
+        });
+
         return root;
     }
 
@@ -139,6 +149,31 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
     public void onResume() {
         super.onResume();
         getSellerAds();
+    }
+
+    private void getBuyersOrders (){
+        networkController.getBuyerOrders(new NetworkCallback<List<Order>>() {
+            @Override
+            public void onError(String error) {
+                Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onResponse(List<Order> orders) {
+                if(orders.isEmpty()) {
+                    mTextPantanir.setText("Þú átt engar pantanir");
+                }
+                else {
+                    ArrayAdapter arrayAdapter = (ArrayAdapter) mListView.getAdapter();
+                    for (Order order : orders) {
+                        orderList.add(order);
+                        orderDates.add("Sækja kvittun fyrir pöntun frá " + order.getTimeOfPurchase().toString().replace("T", " "));
+                    }
+                    arrayAdapter.notifyDataSetChanged();
+                }
+            }
+            }, loggedin_user_id
+        );
     }
 
 
