@@ -65,6 +65,7 @@ public class MenuFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.remove("loggedin_user_id");
                 editor.remove("loggedin_user_type");
+                editor.remove("loggedin_user_email");
                 editor.remove("token");
                 editor.apply();
                 Toast.makeText(getActivity(), "Útskráning tókst", Toast.LENGTH_SHORT).show();

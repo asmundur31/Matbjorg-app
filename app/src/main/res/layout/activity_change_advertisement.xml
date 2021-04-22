@@ -108,15 +108,39 @@
         app:layout_constraintTop_toTopOf="@+id/change_advertisement_tags" />
 
     <Button
+        android:id="@+id/change_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:text="Breyta mynd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_advertisement_location"
+        tools:layout_constraintTop_toBottomOf="@id/change_advertisement_location" />
+
+    <Button
         android:id="@+id/change_advertisement_confirm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:text="Staðfesta"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/change_advertisement_location"
-        app:layout_constraintTop_toTopOf="@+id/change_advertisement_location"/>
+        app:layout_constraintStart_toEndOf="@+id/change_camera"
+        app:layout_constraintTop_toBottomOf="@+id/change_camera"/>
+
+    <ImageView
+        android:id="@+id/change_captureImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_advertisement_confirm_button"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

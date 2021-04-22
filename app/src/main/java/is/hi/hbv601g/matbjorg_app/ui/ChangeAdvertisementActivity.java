@@ -5,22 +5,29 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,8 +45,11 @@ import is.hi.hbv601g.matbjorg_app.models.Tag;
 import is.hi.hbv601g.matbjorg_app.network.NetworkCallback;
 import is.hi.hbv601g.matbjorg_app.network.NetworkController;
 
+import static is.hi.hbv601g.matbjorg_app.network.NetworkController.URL_REST;
+
 public class ChangeAdvertisementActivity extends AppCompatActivity {
     private static final String TAG = "ChangeAdvertisementActivity";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private EditText mChangeAdvertisementHeiti;
     private EditText mChangeAdvertisementLysing;
@@ -61,6 +71,9 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
     private int selectedLocation = -1;
     private Button mChangeAdvertisementConfirmButton;
     private NetworkController networkController;
+    private Button mCamera;
+    private ImageView mImageCapture;
+    private Bundle imageUpload;
     private String token;
 
     private Advertisement advertisement;
@@ -88,9 +101,23 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
         mChangeAdvertisementLocation = (TextView) findViewById(R.id.change_advertisement_location);
         mChangeAdvertisementConfirmButton = (Button) findViewById(R.id.change_advertisement_confirm_button);
         mChangeAdvertisementGildistimi = (TextView) findViewById(R.id.change_advertisement_gildistimi);
+        mCamera = (Button) findViewById(R.id.change_camera);
+        mImageCapture = (ImageView) findViewById(R.id.change_captureImage);
 
         setUpFilterCategory();
         setUpFilterLocation();
+
+        mCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    // display error state to the user
+                }
+            }
+        });
 
         mChangeAdvertisementGildistimi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,7 +167,7 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
                     Double.parseDouble(mChangeAdvertisementVerd.getText().toString()),
                     LocalDateTime.parse(mChangeAdvertisementGildistimi.getText().toString().concat("T00:00"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")),
                     chosenTags,
-                    chosenLocation);
+                    chosenLocation, imageUpload);
                 }
             }
         });
@@ -301,6 +328,13 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
             }
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             mChangeAdvertisementGildistimi.setText(advertisement.getExpireDate().format(formatter));
+            String url = URL_REST + "advertisements/image/" + advertisement.getPictureName();
+            Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(mImageCapture);
+
+            Bitmap bitmap = ((BitmapDrawable) mImageCapture.getDrawable()).getBitmap();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("data", bitmap);
+            imageUpload = bundle;
         }
     }
 
@@ -335,5 +369,15 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
             submit = false;
         }
         return submit;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            imageUpload = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) imageUpload.get("data");
+            mImageCapture.setImageBitmap(imageBitmap);
+        }
     }
 }

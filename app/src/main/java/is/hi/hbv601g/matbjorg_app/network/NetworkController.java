@@ -460,8 +460,9 @@ public class NetworkController {
         NetworkSingleton.getInstance(context).addToRequestQueue(request);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void changeAdvertisement(NetworkCallback<Advertisement> networkCallback, Long advertismentId, String token, String name,
-                                 String description, double originalAmount, double price, LocalDateTime expireDate, List<String> tags, Location location) {
+                                    String description, double originalAmount, double price, LocalDateTime expireDate, List<String> tags, Location location, Bundle picture) {
         String url = URL_REST + "advertisements/" + String.format("change/?advertisementId=%s&token=%s&name=%s&description=%s&originalAmount=%s&price=%s&expireDate=%s&locationId=%s", advertismentId.toString(), token, name, description, ""+originalAmount, ""+price, expireDate.toString(), location.getId());
         JSONArray t = new JSONArray();
         for(int i=0; i<tags.size(); i++) {
@@ -470,6 +471,18 @@ public class NetworkController {
         JSONObject postData = new JSONObject();
         try {
             postData.put("tags", t);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Bitmap bm = (Bitmap) picture.get("data");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        String encodedImage = new String(Base64.getEncoder().encode(b));
+        JSONArray pic = new JSONArray();
+        pic.put(encodedImage);
+        try {
+            postData.put("pic", pic);
         } catch (JSONException e) {
             e.printStackTrace();
         }
