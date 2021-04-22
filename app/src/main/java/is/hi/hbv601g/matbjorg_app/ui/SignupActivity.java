@@ -102,6 +102,7 @@ public class SignupActivity extends AppCompatActivity {
                         editor.putLong("loggedin_user_id", user.getId());
                         editor.putString("loggedin_user_type", user.getType());
                         editor.putString("token", user.getToken());
+                        editor.putString("loggedin_user_email", user.getEmail());
                         editor.apply();
                         Toast.makeText(SignupActivity.this, "Nýskráning gekk", Toast.LENGTH_SHORT).show();
                         finish();
