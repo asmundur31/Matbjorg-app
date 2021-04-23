@@ -85,7 +85,7 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String url = URL_REST + "advertisements/image/" + mPictureName.get(position);
-        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(holder.itemImage);
+        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).error(R.drawable.fastfood_100).into(holder.itemImage);
         holder.itemTitle.setText(mTitles.get(position));
         holder.itemSeller.setText("Söluaðili: " + mSellers.get(position));
         holder.itemDescription.setText("Lýsing: " + mDescription.get(position));

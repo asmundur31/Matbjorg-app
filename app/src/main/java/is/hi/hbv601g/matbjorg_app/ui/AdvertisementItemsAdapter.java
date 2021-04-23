@@ -1,8 +1,6 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +51,7 @@ public class AdvertisementItemsAdapter extends RecyclerView.Adapter<Advertisemen
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String url = URL_REST + "advertisements/image/" + mAdvertisements.get(position).getPictureName();
-        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(holder.itemImage);
+        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).error(R.drawable.fastfood_100).into(holder.itemImage);
         holder.itemName.setText(mAdvertisements.get(position).getName());
         holder.itemSeller.setText("Söluaðili: " + mAdvertisements.get(position).getSellerName());
         holder.itemCurrentAmount.setText("Magn: " + mAdvertisements.get(position).getCurrentAmount());

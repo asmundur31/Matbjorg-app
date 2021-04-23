@@ -75,7 +75,7 @@ public class AdvertisementActivity extends AppCompatActivity {
             Log.d(TAG, advertisement.getLocation().getName());
 
             String url = URL_REST + "advertisements/image/" + advertisement.getPictureName();
-            Picasso.get().load(url).fit().centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(mImage);
+            Picasso.get().load(url).fit().centerCrop().placeholder(R.drawable.ic_launcher_foreground).error(R.drawable.fastfood_200).into(mImage);
 
             mName.setText(advertisement.getName());
             mPrice.setText("Verð: " + advertisement.getPrice());

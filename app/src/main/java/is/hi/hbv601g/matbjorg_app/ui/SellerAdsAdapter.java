@@ -58,7 +58,7 @@ public class SellerAdsAdapter extends RecyclerView.Adapter<SellerAdsAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: called");
         String url = URL_REST + "advertisements/image/" + mSellerAds.get(position).getPictureName();
-        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(holder.image);
+        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).error(R.drawable.fastfood_100).into(holder.image);
         holder.name.setText("Heiti : " + mSellerAds.get(position).getName());
         holder.description.setText("Lýsing : " + mSellerAds.get(position).getDescription());
         holder.originalAmount.setText("Upphaflegt magn : " + mSellerAds.get(position).getOriginalAmount());
