@@ -53,7 +53,7 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
     private static final String TAG = "ProfileFragment";
     private TextView mText;
     private ListView mListView;
-    private  TextView mTextPantanir;
+    private TextView mTextPantanir;
     private Button mButtonSetjaInnAuglysingu;
     private RecyclerView mSellerAdvertisements;
     private LinearLayout mSellerAdvertisement;
@@ -94,16 +94,20 @@ public class ProfileFragment extends Fragment implements SellerAdsAdapter.OnAdCh
             if(loggedin_user_type.equals("buyer")) {
                 mSellerAdvertisements.setVisibility(View.GONE);
                 mButtonSetjaInnAuglysingu.setVisibility(View.GONE);
+                mListView.setVisibility(View.VISIBLE);
+                mTextPantanir.setVisibility(View.VISIBLE);
                 mTextPantanir.setText("Þínar pantanir:");
                 Toast.makeText(getActivity(), "Sæki pantanir notanda", Toast.LENGTH_SHORT).show();
                 ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, orderDates);
                 mListView.setAdapter(arrayAdapter);
                 getBuyersOrders();
-
             }
 
             if(loggedin_user_type.equals("seller")){
+                mListView.setVisibility(View.GONE);
+                mTextPantanir.setVisibility(View.GONE);
                 mButtonSetjaInnAuglysingu.setVisibility(View.VISIBLE);
+                mSellerAdvertisements.setVisibility(View.VISIBLE);
                 mButtonSetjaInnAuglysingu.setOnClickListener(new View.OnClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
