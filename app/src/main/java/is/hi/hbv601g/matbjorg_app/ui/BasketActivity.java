@@ -39,6 +39,7 @@ public class BasketActivity extends AppCompatActivity {
     private Button mConfirmBasket;
     public static final int REQUEST_CODE_BASKET = 0;
     private List<OrderItem> mItems = new ArrayList<OrderItem>();
+    private String token;
 
     private NetworkController networkController;
 
@@ -58,32 +59,11 @@ public class BasketActivity extends AppCompatActivity {
 
         // Sækjum token hjá innskráðum notanda
         SharedPreferences sharedPref = getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
-        String token = sharedPref.getString("token", "");
+        token = sharedPref.getString("token", "");
         networkController = new NetworkController(this);
         mBasket.setVisibility(View.GONE);
-        networkController.getActiveOrder(new NetworkCallback<Order>() {
-            @Override
-            public void onError(String error) {
-                Toast.makeText(BasketActivity.this, error, Toast.LENGTH_SHORT).show();
-            }
 
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onResponse(Order order) {
-                String title = "";
-                if (order.getItems().size() > 0) {
-                    title = "Karfa";
-                    mBasket.setVisibility(View.VISIBLE);
-                } else {
-                    title = "Karfan er tóm";
-                }
-                mBasketTitle.setText(title);
-                mItems = order.getItems();
-                buildRecyclerView(order, token);
-                double totalPrice = order.getTotalPrice();
-                mTotalPrice.setText("Samtals: " + totalPrice);
-            }
-        }, token);
+        getActiveOrder();
 
         mConfirmBasket.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,5 +170,40 @@ public class BasketActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActiveOrder();
+    }
+
+    private void getActiveOrder() {
+        networkController.getActiveOrder(new NetworkCallback<Order>() {
+            @Override
+            public void onError(String error) {
+                Toast.makeText(BasketActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(Order order) {
+                String title = "";
+                if (order.getItems().size() > 0) {
+                    title = "Karfa";
+                    mBasket.setVisibility(View.VISIBLE);
+                    mTotalPrice.setVisibility(View.VISIBLE);
+                } else {
+                    title = "Karfan er tóm";
+                    mBasket.setVisibility(View.GONE);
+                    mTotalPrice.setVisibility(View.GONE);
+                }
+                mBasketTitle.setText(title);
+                mItems = order.getItems();
+                buildRecyclerView(order, token);
+                double totalPrice = order.getTotalPrice();
+                mTotalPrice.setText("Samtals: " + totalPrice);
+            }
+        }, token);
     }
 }
