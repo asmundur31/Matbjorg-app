@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="is.hi.hbv601g.matbjorg_app">
-
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the "MyLocation" functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -12,12 +18,31 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Matbjorgapp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.AddAdvertisementActivity"></activity>
-        <activity android:name=".ui.AdvertisementActivity"></activity>
+        <activity android:name=".ui.ChangeAdvertisementActivity"></activity>
+        <activity android:name=".ui.AddReviewActivity" />
+        <activity android:name=".ui.ReviewActivity" />
+        <activity android:name=".ui.AddLocationActivity" />
+        <activity android:name=".ui.MapsActivity" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".ui.CategoryActivity" />
+        <activity android:name=".ui.AddAdvertisementActivity" />
+        <activity android:name=".ui.AdvertisementActivity" />
         <activity android:name=".ui.AdvertisementsActivity" />
-        <activity android:name=".ui.BasketActivity"></activity>
-        <activity android:name=".ui.SignupActivity"></activity>
+        <activity android:name=".ui.BasketActivity" />
+        <activity android:name=".ui.SignupActivity" />
         <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.ReceiptActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">

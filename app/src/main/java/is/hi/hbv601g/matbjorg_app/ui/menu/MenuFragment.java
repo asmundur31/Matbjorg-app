@@ -17,6 +17,9 @@ import androidx.fragment.app.Fragment;
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.ui.BasketActivity;
 import is.hi.hbv601g.matbjorg_app.ui.LoginActivity;
+import is.hi.hbv601g.matbjorg_app.ui.MapsActivity;
+import is.hi.hbv601g.matbjorg_app.ui.MapsFragment;
+import is.hi.hbv601g.matbjorg_app.ui.ReviewActivity;
 import is.hi.hbv601g.matbjorg_app.ui.SignupActivity;
 
 public class MenuFragment extends Fragment {
@@ -26,10 +29,15 @@ public class MenuFragment extends Fragment {
     private Button mSignupButton;
     private Button mLogoutButton;
     private Button mBasketButton;
+    private Button mMapButton;
+    private Button mReviewButton;
     private static final int REQUEST_CODE_LOGIN = 0;
     private static final int REQUEST_CODE_NOT_LOGGED_IN = 1;
     private static final int REQUEST_CODE_BASKET = 2;
     private static final int REQUEST_CODE_SIGNUP = 3;
+    private static final int REQUEST_CODE_MAP = 4;
+    private static final int REQUEST_CODE_REVIEW = 5;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_menu, container, false);
@@ -57,6 +65,7 @@ public class MenuFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.remove("loggedin_user_id");
                 editor.remove("loggedin_user_type");
+                editor.remove("loggedin_user_email");
                 editor.remove("token");
                 editor.apply();
                 Toast.makeText(getActivity(), "Útskráning tókst", Toast.LENGTH_SHORT).show();
@@ -84,6 +93,23 @@ public class MenuFragment extends Fragment {
             }
         });
 
+        mMapButton = (Button) root.findViewById(R.id.map_button);
+        mMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = MapsActivity.newIntent(getActivity());
+                startActivityForResult(intent, REQUEST_CODE_MAP);
+            }
+        });
+
+        mReviewButton = (Button) root.findViewById(R.id.review_button);
+        mReviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = ReviewActivity.newIntent(getActivity());
+                startActivityForResult(intent, REQUEST_CODE_REVIEW);
+            }
+        });
         // Athugum hvort eitthver sé loggaður inn
         checkLoggedIn();
         return root;
@@ -98,6 +124,7 @@ public class MenuFragment extends Fragment {
     private void checkLoggedIn() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.sharedPref), Context.MODE_PRIVATE);
         String loggedin_user_type = sharedPref.getString("loggedin_user_type", "");
+        Log.d(TAG, loggedin_user_type);
         if (loggedin_user_type.equals("")) {
             mLoginButton.setVisibility(View.VISIBLE);
             mSignupButton.setVisibility(View.VISIBLE);

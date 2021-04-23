@@ -1,6 +1,7 @@
 package is.hi.hbv601g.matbjorg_app.ui;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +22,8 @@ import java.util.List;
 
 import is.hi.hbv601g.matbjorg_app.R;
 import is.hi.hbv601g.matbjorg_app.models.OrderItem;
+
+import static is.hi.hbv601g.matbjorg_app.network.NetworkController.URL_REST;
 
 public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.ViewHolder> {
     private static final String TAG = "BasketItemAdapter";
@@ -30,7 +36,9 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
     private ArrayList<LocalDateTime> mExpireDate = new ArrayList<>();
     private Context context;
     private OnItemListener listener;
+    private ArrayList<String> mPictureName = new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public BasketItemAdapter(List<OrderItem> items, Context context) {
         for (int i=0; i<items.size(); i++) {
             this.mTitles.add(items.get(i).getAdvertisement().getName());
@@ -39,6 +47,7 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
             this.mAmount.add(items.get(i).getAmount());
             this.mPrice.add(items.get(i).getAdvertisement().getPrice());
             this.mExpireDate.add(items.get(i).getAdvertisement().getExpireDate());
+            this.mPictureName.add(items.get(i).getAdvertisement().getPictureName());
         }
         this.context = context;
     }
@@ -56,6 +65,7 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
             mAmount.remove(position);
             mPrice.remove(position);
             mExpireDate.remove(position);
+            mPictureName.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, mTitles.size());
         } else {
@@ -74,10 +84,13 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String url = URL_REST + "advertisements/image/" + mPictureName.get(position);
+        Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(holder.itemImage);
         holder.itemTitle.setText(mTitles.get(position));
         holder.itemSeller.setText("Söluaðili: " + mSellers.get(position));
         holder.itemDescription.setText("Lýsing: " + mDescription.get(position));
-        holder.itemAmount.setText(mAmount.get(position).toString());
+        int amount = mAmount.get(position).intValue();
+        holder.itemAmount.setText(amount+"");
         holder.itemPrice.setText("Verð: " + mPrice.get(position).toString());
         holder.itemExpireDate.setText("Gildir til: " + mExpireDate.get(position));
     }
@@ -99,6 +112,7 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
         ImageView deleteItem;
         Button changeAmount;
         OnItemListener listener;
+        ImageView itemImage;
 
         public ViewHolder(@NonNull View itemView, OnItemListener listener) {
             super(itemView);
@@ -110,6 +124,7 @@ public class BasketItemAdapter extends RecyclerView.Adapter<BasketItemAdapter.Vi
             itemExpireDate = itemView.findViewById(R.id.basket_item_expire_date);
             deleteItem = itemView.findViewById(R.id.delete_item);
             changeAmount = itemView.findViewById(R.id.change_amount);
+            itemImage = itemView.findViewById(R.id.basket_item_image);
             this.listener = listener;
 
             deleteItem.setOnClickListener(new View.OnClickListener() {
