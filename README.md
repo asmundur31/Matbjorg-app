@@ -11,7 +11,7 @@ Til þess að keyra upp appið í emulator með remote bakenda þá þarf að ge
 Til þess að keyra upp appið í emulator með local bakenda þá þarf að gera eftirfarandi:
 1. Clone-a þetta repo á tölvuna þína.
 2. Clona-a repo sem inniheldur bakenda á tölvuna þína ([Bakenda Repo](https://github.com/asmundur31/Matbjorg)).
-3. Setja upp posgres gagnagrunn og passa að application.properties skráinn hafi réttar upplýsingar í bakenda.
+3. Setja upp postgres gagnagrunn og passa að application.properties skráin hafi réttar upplýsingar í bakenda.
 ```
 spring.datasource.url=jdbc:postgresql://localhost:5432/<nafn á gagnagrunni>
 spring.datasource.username=<notandanafn>
