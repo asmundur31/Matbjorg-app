@@ -329,12 +329,15 @@ public class ChangeAdvertisementActivity extends AppCompatActivity {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             mChangeAdvertisementGildistimi.setText(advertisement.getExpireDate().format(formatter));
             String url = URL_REST + "advertisements/image/" + advertisement.getPictureName();
-            Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).into(mImageCapture);
-
-            Bitmap bitmap = ((BitmapDrawable) mImageCapture.getDrawable()).getBitmap();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("data", bitmap);
-            imageUpload = bundle;
+            Picasso.get().load(url).resize(250, 250).centerCrop().placeholder(R.drawable.ic_launcher_foreground).error(R.drawable.fastfood_200).into(mImageCapture);
+            try {
+                Bitmap bitmap = ((BitmapDrawable) mImageCapture.getDrawable()).getBitmap();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("data", bitmap);
+                imageUpload = bundle;
+            } catch(Exception e) {
+                Log.d("ChangeAdvertisementActi", "Myndin er ekki til");
+            }
         }
     }
 
