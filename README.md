@@ -33,7 +33,9 @@ Söluaðili:
 - Lykilorð: 123
 
 ## Myndavél
+Þegar ný auglýsingin er búin til þá þarf að bæta við mynd af vöru sem á að auglýsa. Við það opnast fyrir myndavélina á síma viðkomandi. 
 
+Ef notaður er emulator með Android Studio þá þarf að gera myndavélina virka með því að fylgja eftirfarandi skrefum:
 
 ## Virkni sem var komin fyrir code review
 Karfa
