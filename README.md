@@ -33,14 +33,15 @@ Söluaðili:
 - Lykilorð: 123
 
 ## Myndavél
-Til þess að myndavélin virki í emulator þá þarf að gera eftirfarandi:
 
+Þegar ný auglýsingin er búin til þá þarf að bæta við mynd af vöru sem á að auglýsa. Við það opnast fyrir myndavélina á síma viðkomandi. 
+
+Ef notaður er emulator með Android Studio þá þarf að gera myndavélina virka með því að fylgja eftirfarandi skrefum:
 ![Skref 1](instructions/Step1.png)
 ![Skref 2](instructions/Step2.png)
 ![Skref 3](instructions/Step3.png)
 ![Skref 4](instructions/Step4.png)
 ![Skref 5](instructions/Step5.png)
-
 
 ## Virkni sem var komin fyrir code review
 Karfa
