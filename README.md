@@ -33,6 +33,13 @@ Söluaðili:
 - Lykilorð: 123
 
 ## Myndavél
+Til þess að myndavélin virki í emulator þá þarf að gera eftirfarandi:
+
+![Skref 1](instructions/Step1.png)
+![Skref 2](instructions/Step2.png)
+![Skref 3](instructions/Step3.png)
+![Skref 4](instructions/Step4.png)
+![Skref 5](instructions/Step5.png)
 
 
 ## Virkni sem var komin fyrir code review
