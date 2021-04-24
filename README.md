@@ -1,5 +1,5 @@
 # Matbjörg app
-Þetta er framendi ofaná Matbjörg bakenda sem er að finna hér [Bakenda Repo](https://github.com/asmundur31/Matbjorg).
+Þetta er framendi ofaná Matbjörg bakenda sem er að finna hér [bakenda repo](https://github.com/asmundur31/Matbjorg).
 
 ## Uppsetning
 Í skránni NetworkController er hægt að skipta á milli local og remote bakenda.
@@ -32,7 +32,10 @@ Söluaðili:
 - Notandanafn: kronan@kronan.is
 - Lykilorð: 123
 
-## Virkni sem er kominn fyrir code review
+## Myndavél
+
+
+## Virkni sem var komin fyrir code review
 Karfa
 1. Birta körfu
 2. Breyta magni af items
